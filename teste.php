@@ -7,6 +7,5 @@
 </head>
 <body>
     TESTE TESTE TESTE COMMIT akahfsdhdkahdkj sadwa
-    teste gay teste davi lindo lara largou pq é burra
 </body>
 </html>
