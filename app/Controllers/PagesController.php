@@ -14,6 +14,14 @@ class PagesController
         ]);
     }
 
+        public function contato(): void
+    {
+	
+        $this->render('pages/index', [
+            'title' => 'Usuários',
+        ]);
+    }
+
     private function csrfToken(): string
     {
         session_status() === PHP_SESSION_NONE && session_start();
