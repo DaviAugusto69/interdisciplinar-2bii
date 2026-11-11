@@ -17,7 +17,23 @@ class PagesController
         public function contato(): void
     {
 	
-        $this->render('pages/index', [
+        $this->render('pages/contact', [
+            'title' => 'Usuários',
+        ]);
+    }
+
+    public function resume(): void
+    {
+	
+        $this->render('pages/resume', [
+            'title' => 'Usuários',
+        ]);
+    }
+
+    public function projects(): void
+    {
+	
+        $this->render('pages/projects', [
             'title' => 'Usuários',
         ]);
     }
