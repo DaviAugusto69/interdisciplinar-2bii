@@ -16,7 +16,6 @@ body {
 }
 .topo a { color: #fff; margin-right: 1rem; text-decoration: none; }
 
-main { max-width: 720px; margin: 2rem auto; padding: 0 1rem; }
 
 label { display: block; margin-top: 1rem; }
 input { width: 100%; padding: 0.5rem; }

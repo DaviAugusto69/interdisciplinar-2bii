@@ -2,40 +2,15 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?= e($title ?? 'Projeto MVC') ?></title>
-
-    <!-- Mantenha aqui as fontes, ícones e
-         dependências do head do template -->
-
-         
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <meta name="description" content="" />
-        <meta name="author" content="" />
-        <title>Personal - Start Bootstrap Theme</title>
-        <!-- Favicon-->
-        <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
-        <!-- Custom Google font-->
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@100;200;300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet" />
-        <!-- Bootstrap icons-->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css" rel="stylesheet" />
-        <!-- Core theme CSS (includes Bootstrap)-->
-        <link href="css/styles.css" rel="stylesheet" />
-
-    
-
-    <!-- CSS do Bootstrap/template -->
-    <link rel="stylesheet"
-          href="<?= e(asset('css/styles.css')) ?>">
-
-    <!-- Seu CSS personalizado -->
-    <link rel="stylesheet"
-          href="<?= e(asset('css/estilo.css')) ?>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@100;200;300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="<?= e(asset('css/styles.css')) ?>">
+    <link rel="stylesheet" href="<?= e(asset('css/estilo.css')) ?>">
+    <link rel="icon" type="image/x-icon" href="<?= e(asset('assets/favicon.ico')) ?>">
 </head>
 
 <body>
@@ -81,7 +56,7 @@
                                 <div class="profile bg-gradient-primary-to-secondary">
                                     <!-- TIP: For best results, use a photo with a transparent background like the demo example below-->
                                     <!-- Watch a tutorial on how to do this on YouTube (link)-->
-                                    <img class="profile-img" src="assets/profile.png" alt="..." />
+                                    <img class="profile-img" src="<?= e(asset('assets/profile.png')) ?>" alt="..." />
                                     <div class="dots-1">
                                         <!-- SVG Dots-->
                                         <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 191.6 1215.4" style="enable-background: new 0 0 191.6 1215.4" xml:space="preserve">
@@ -207,7 +182,6 @@
     </main>
 
     <!--JavaScript do páginas -->
-    <script src="<?= e(asset('js/scripts.js')) ?>"></script>
 
     <!-- COLE AQUI O RODAPÉ DO index.html -->
     
@@ -230,7 +204,7 @@
 
     
 
-    <!-- Scripts do template -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="<?= e(asset('js/scripts.js')) ?>"></script>
 
     <!-- Scripts do seu MVC -->
