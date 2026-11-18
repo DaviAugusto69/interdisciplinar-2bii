@@ -28,7 +28,7 @@
                             <li class="nav-item"><a class="nav-link" href="<?= e(url('pages/index')) ?>">Home</a></li>
                             <li class="nav-item"><a class="nav-link" href="<?= e(url('pages/resume')) ?>">Resume</a></li>
                             <li class="nav-item"><a class="nav-link" href="<?= e(url('pages/projects')) ?>">Projects</a></li>
-                            <li class="nav-item"><a class="nav-link" href="<?= e(url('pages/contact')) ?>">Contact</a></li>
+                            <li class="nav-item"><a class="nav-link" href="<?= e(url('pages/contact')) ?>">Cadastro</a></li>
                         </ul>
                     </div>
                 </div>
@@ -199,6 +199,7 @@
                         <a class="small" href="#!">Terms</a>
                         <span class="mx-1">&middot;</span>
                         <a class="small" href="#!">Contact</a>
+                        
                     </div>
                 </div>
             </div>
