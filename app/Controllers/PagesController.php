@@ -11,6 +11,7 @@ class PagesController
 	
         $this->render('pages/index', [
             'title' => 'Inicio',
+            'showHero' => true,
         ]);
     }
 
