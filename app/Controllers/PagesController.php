@@ -14,7 +14,7 @@ class PagesController
         ]);
     }
 
-        public function contato(): void
+    public function contact(): void
     {
 	
         $this->render('pages/contact', [
