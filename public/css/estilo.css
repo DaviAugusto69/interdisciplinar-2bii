@@ -1,10 +1,188 @@
-* { box-sizing: border-box; }
+:root {
+    --palette-blue: #17568A;
+    --palette-petroleum: #0F766E;
+    --palette-ice: #F7FAFC;
+    --palette-deep: #17324D;
+
+    --bs-blue: var(--palette-blue);
+    --bs-teal: var(--palette-petroleum);
+    --bs-primary: var(--palette-blue);
+    --bs-primary-rgb: 23, 86, 138;
+    --bs-secondary: var(--palette-petroleum);
+    --bs-secondary-rgb: 15, 118, 110;
+    --bs-success: var(--palette-petroleum);
+    --bs-success-rgb: 15, 118, 110;
+    --bs-light: var(--palette-ice);
+    --bs-light-rgb: 247, 250, 252;
+    --bs-white: var(--palette-ice);
+    --bs-white-rgb: 247, 250, 252;
+    --bs-dark: var(--palette-deep);
+    --bs-dark-rgb: 23, 50, 77;
+    --bs-gray-100: var(--palette-ice);
+    --bs-body-color: var(--palette-deep);
+    --bs-body-color-rgb: 23, 50, 77;
+    --bs-body-bg: var(--palette-ice);
+    --bs-body-bg-rgb: 247, 250, 252;
+    --bs-link-color: var(--palette-blue);
+    --bs-link-hover-color: var(--palette-petroleum);
+    --bs-code-color: var(--palette-petroleum);
+    --bs-border-color: rgba(23, 50, 77, 0.16);
+}
 
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    color: #222;
-    background: #f5f6f8;
+    color: var(--palette-deep);
+    background-color: var(--palette-ice);
+}
+
+a {
+    color: var(--palette-blue);
+}
+
+a:hover,
+a:focus-visible {
+    color: var(--palette-petroleum);
+}
+
+.navbar,
+.bg-white {
+    background-color: var(--palette-ice) !important;
+}
+
+.navbar-light .navbar-brand,
+.navbar-light .navbar-nav .nav-link {
+    color: var(--palette-deep);
+}
+
+.navbar-light .navbar-nav .nav-link:hover,
+.navbar-light .navbar-nav .nav-link:focus,
+.navbar-light .navbar-nav .nav-link.active {
+    color: var(--palette-blue);
+}
+
+.btn-primary {
+    --bs-btn-color: var(--palette-ice);
+    --bs-btn-bg: var(--palette-blue);
+    --bs-btn-border-color: var(--palette-blue);
+    --bs-btn-hover-color: var(--palette-ice);
+    --bs-btn-hover-bg: #12466F;
+    --bs-btn-hover-border-color: #12466F;
+    --bs-btn-focus-shadow-rgb: 23, 86, 138;
+    --bs-btn-active-color: var(--palette-ice);
+    --bs-btn-active-bg: #103F64;
+    --bs-btn-active-border-color: #103F64;
+    --bs-btn-disabled-color: var(--palette-ice);
+    --bs-btn-disabled-bg: var(--palette-blue);
+    --bs-btn-disabled-border-color: var(--palette-blue);
+}
+
+.btn-secondary,
+.btn-success {
+    --bs-btn-color: var(--palette-ice);
+    --bs-btn-bg: var(--palette-petroleum);
+    --bs-btn-border-color: var(--palette-petroleum);
+    --bs-btn-hover-color: var(--palette-ice);
+    --bs-btn-hover-bg: #0C625C;
+    --bs-btn-hover-border-color: #0C625C;
+    --bs-btn-focus-shadow-rgb: 15, 118, 110;
+    --bs-btn-active-color: var(--palette-ice);
+    --bs-btn-active-bg: #0A554F;
+    --bs-btn-active-border-color: #0A554F;
+    --bs-btn-disabled-color: var(--palette-ice);
+    --bs-btn-disabled-bg: var(--palette-petroleum);
+    --bs-btn-disabled-border-color: var(--palette-petroleum);
+}
+
+.btn-outline-primary {
+    --bs-btn-color: var(--palette-blue);
+    --bs-btn-border-color: var(--palette-blue);
+    --bs-btn-hover-color: var(--palette-ice);
+    --bs-btn-hover-bg: var(--palette-blue);
+    --bs-btn-hover-border-color: var(--palette-blue);
+    --bs-btn-focus-shadow-rgb: 23, 86, 138;
+    --bs-btn-active-color: var(--palette-ice);
+    --bs-btn-active-bg: var(--palette-blue);
+    --bs-btn-active-border-color: var(--palette-blue);
+    --bs-btn-disabled-color: var(--palette-blue);
+    --bs-btn-disabled-border-color: var(--palette-blue);
+}
+
+.btn-outline-secondary,
+.btn-outline-success {
+    --bs-btn-color: var(--palette-petroleum);
+    --bs-btn-border-color: var(--palette-petroleum);
+    --bs-btn-hover-color: var(--palette-ice);
+    --bs-btn-hover-bg: var(--palette-petroleum);
+    --bs-btn-hover-border-color: var(--palette-petroleum);
+    --bs-btn-focus-shadow-rgb: 15, 118, 110;
+    --bs-btn-active-color: var(--palette-ice);
+    --bs-btn-active-bg: var(--palette-petroleum);
+    --bs-btn-active-border-color: var(--palette-petroleum);
+    --bs-btn-disabled-color: var(--palette-petroleum);
+    --bs-btn-disabled-border-color: var(--palette-petroleum);
+}
+
+.btn-outline-dark {
+    --bs-btn-color: var(--palette-deep);
+    --bs-btn-border-color: var(--palette-deep);
+    --bs-btn-hover-color: var(--palette-ice);
+    --bs-btn-hover-bg: var(--palette-deep);
+    --bs-btn-hover-border-color: var(--palette-deep);
+    --bs-btn-active-color: var(--palette-ice);
+    --bs-btn-active-bg: var(--palette-deep);
+    --bs-btn-active-border-color: var(--palette-deep);
+}
+
+.bg-gradient-primary-to-secondary {
+    background: linear-gradient(135deg, var(--palette-blue) 0%, var(--palette-petroleum) 100%);
+}
+
+.text-gradient {
+    background: linear-gradient(135deg, var(--palette-blue) 0%, var(--palette-petroleum) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.profile .dots-2 svg,
+.profile .dots-4 svg {
+    fill: var(--palette-blue);
+}
+
+.form-control,
+.form-select {
+    color: var(--palette-deep);
+    background-color: var(--palette-ice);
+    border-color: rgba(23, 50, 77, 0.24);
+}
+
+.form-control:focus,
+.form-select:focus {
+    color: var(--palette-deep);
+    background-color: var(--palette-ice);
+    border-color: var(--palette-blue);
+    box-shadow: 0 0 0 0.25rem rgba(23, 86, 138, 0.2);
+}
+
+.form-check-input:checked,
+.progress-bar {
+    background-color: var(--palette-petroleum);
+    border-color: var(--palette-petroleum);
+}
+
+.card,
+.bg-light {
+    background-color: var(--palette-ice) !important;
+}
+
+.card,
+.form-control,
+.form-select,
+.btn-outline-dark {
+    border-color: rgba(23, 50, 77, 0.2);
+}
+
+.text-muted {
+    color: #52677A !important;
 }
 
 .topo {
@@ -12,14 +190,30 @@ body {
     align-items: center;
     gap: 1rem;
     padding: 0.75rem 1.5rem;
-    background: #1f3864;
+    background-color: var(--palette-deep);
 }
-.topo a { color: #fff; margin-right: 1rem; text-decoration: none; }
 
+.topo a {
+    color: var(--palette-ice);
+    margin-right: 1rem;
+    text-decoration: none;
+}
 
-label { display: block; margin-top: 1rem; }
-input { width: 100%; padding: 0.5rem; }
-button { margin-top: 1rem; padding: 0.5rem 1.25rem; }
+label {
+    display: block;
+    margin-top: 1rem;
+}
 
-.erro { color: #b00020; margin: 0.25rem 0 0; }
-.lista li { margin: 0.5rem 0; }
+input {
+    width: 100%;
+    padding: 0.5rem;
+}
+
+.erro {
+    color: var(--palette-deep);
+    margin: 0.25rem 0 0;
+}
+
+.lista li {
+    margin: 0.5rem 0;
+}
