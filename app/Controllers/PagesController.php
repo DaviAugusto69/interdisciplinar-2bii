@@ -10,7 +10,7 @@ class PagesController
     {
 	
         $this->render('pages/index', [
-            'title' => 'Usuários',
+            'title' => 'Inicio',
         ]);
     }
 
@@ -18,7 +18,7 @@ class PagesController
     {
 	
         $this->render('pages/contact', [
-            'title' => 'Usuários',
+            'title' => 'Contato',
         ]);
     }
 
@@ -26,7 +26,7 @@ class PagesController
     {
 	
         $this->render('pages/resume', [
-            'title' => 'Usuários',
+            'title' => 'Resumo',
         ]);
     }
 
@@ -34,7 +34,7 @@ class PagesController
     {
 	
         $this->render('pages/projects', [
-            'title' => 'Usuários',
+            'title' => 'Projetos',
         ]);
     }
 
