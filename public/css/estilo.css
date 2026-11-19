@@ -1159,3 +1159,191 @@ input {
         grid-template-columns: 1fr;
     }
 }
+
+/* ==========================================================================
+   PREFERÊNCIAS DO USUÁRIO (páginas Perfil e configurações / Ajuda e suporte)
+   O PHP escreve data-fonte e data-tema no <html> (layouts/main.php).
+   ========================================================================== */
+
+/* ---- Tamanho do texto (Bootstrap usa rem, então tudo acompanha) ---- */
+html[data-fonte="grande"] { font-size: 125%; }
+html[data-fonte="maior"]  { font-size: 150%; }
+
+/* ---- Foco visível para quem usa teclado ---- */
+:root { --eda-foco: #1e30f3; }
+.eda-page :focus-visible,
+.eda-page .btn-check:focus-visible + .btn { outline: 3px solid var(--eda-foco); outline-offset: 2px; }
+
+/* ---- Neutraliza regras globais acima (label, input, button) dentro das páginas novas ---- */
+.eda-page label { margin-top: 0; }
+.eda-page button { margin-top: 0; }
+.eda-page input[type="radio"],
+.eda-page input[type="checkbox"] { width: auto; }
+
+@media (prefers-reduced-motion: reduce) {
+    .eda-page * { transition: none !important; animation: none !important; }
+}
+
+.eda-opcao { text-align: left; }
+.eda-passo-icone { width: 4rem; height: 4rem; font-size: 2rem; }
+
+/* ==========================================================================
+   TEMA ESCURO
+   ========================================================================== */
+html[data-tema="escuro"] .text-gradient {
+    background: linear-gradient(315deg, #8c97ff 0%, #ff7ab8 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+html[data-tema="escuro"] a:not(.btn):not(.nav-link):not(.navbar-brand) { color: #8c97ff; }
+html[data-tema="escuro"] hr { color: #495057; }
+
+html[data-tema="escuro"] .navbar {
+    --bs-navbar-color: rgba(255, 255, 255, 0.78);
+    --bs-navbar-hover-color: #fff;
+    --bs-navbar-active-color: #fff;
+    --bs-navbar-toggler-border-color: rgba(255, 255, 255, 0.35);
+    --bs-navbar-toggler-icon-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.85%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+    border-bottom: 1px solid #343a40;
+}
+
+html[data-tema="escuro"] .card { --bs-card-bg: #1b1e23; --bs-card-border-color: #343a40; --bs-card-color: #e9ecef; color: #e9ecef; }
+html[data-tema="escuro"] .form-control,
+html[data-tema="escuro"] .form-select { background-color: #2b3035; color: #f8f9fa; border-color: #6c757d; }
+html[data-tema="escuro"] .form-select {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23f8f9fa' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+}
+html[data-tema="escuro"] .form-control:focus,
+html[data-tema="escuro"] .form-select:focus { background-color: #2b3035; color: #fff; border-color: #8c97ff; box-shadow: 0 0 0 0.25rem rgba(140, 151, 255, 0.35); }
+html[data-tema="escuro"] .form-floating > label { color: #ced4da; }
+html[data-tema="escuro"] .invalid-feedback { color: #ff8a95; }
+
+html[data-tema="escuro"] .btn-outline-primary {
+    --bs-btn-color: #8c97ff;
+    --bs-btn-border-color: #8c97ff;
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: #1e30f3;
+    --bs-btn-hover-border-color: #1e30f3;
+    --bs-btn-active-color: #fff;
+    --bs-btn-active-bg: #1e30f3;
+    --bs-btn-active-border-color: #8c97ff;
+}
+html[data-tema="escuro"] .accordion {
+    --bs-accordion-color: #e9ecef;
+    --bs-accordion-bg: #1b1e23;
+    --bs-accordion-border-color: #343a40;
+    --bs-accordion-btn-color: #e9ecef;
+    --bs-accordion-btn-bg: #1b1e23;
+    --bs-accordion-active-color: #fff;
+    --bs-accordion-active-bg: #232a6e;
+    --bs-accordion-btn-icon: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23e9ecef'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+    --bs-accordion-btn-active-icon: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23ffffff'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+}
+html[data-tema="escuro"] .alert-success { --bs-alert-color: #a3e4c0; --bs-alert-bg: #10301f; --bs-alert-border-color: #1f5a3a; }
+html[data-tema="escuro"] .alert-danger { --bs-alert-color: #ffb3bb; --bs-alert-bg: #3a1419; --bs-alert-border-color: #6b2630; }
+html[data-tema="escuro"] .progress { --bs-progress-bg: #343a40; --bs-progress-bar-bg: #8c97ff; --bs-progress-bar-color: #000; }
+
+
+/* FUNDO E CORES GERAIS DO TEMA ESCURO */
+html[data-tema="escuro"] {
+    color-scheme: dark;
+}
+
+html[data-tema="escuro"] body {
+    background-color: #121212;
+    color: #e9ecef;
+}
+
+html[data-tema="escuro"] .bg-white,
+html[data-tema="escuro"] .bg-light {
+    background-color: #1b1e23 !important;
+    color: #e9ecef !important;
+}
+
+html[data-tema="escuro"] .text-muted {
+    color: #adb5bd !important;
+}
+
+html[data-tema="escuro"] footer {
+    background-color: #1b1e23 !important;
+    color: #e9ecef;
+}
+
+
+/* ==========================================================================
+   TEMA DE ALTO CONTRASTE (preto, branco e amarelo)
+   ========================================================================== */
+html[data-tema="contraste"] { color-scheme: dark; --eda-foco: #ffeb3b; }
+html[data-tema="contraste"] body { background: #000; color: #fff; }
+html[data-tema="contraste"] .bg-white,
+html[data-tema="contraste"] .bg-light { background-color: #000 !important; }
+html[data-tema="contraste"] .bg-light.rounded-4 { border: 2px solid #fff; }
+html[data-tema="contraste"] .shadow { box-shadow: none !important; }
+html[data-tema="contraste"] .text-muted { color: #e6e6e6 !important; }
+html[data-tema="contraste"] .text-primary { color: #ffeb3b !important; }
+html[data-tema="contraste"] .text-danger { color: #ff8a8a !important; }
+html[data-tema="contraste"] .text-gradient { background: none; -webkit-text-fill-color: #ffeb3b; color: #ffeb3b; }
+html[data-tema="contraste"] a:not(.btn):not(.nav-link):not(.navbar-brand) { color: #ffeb3b; text-decoration: underline; }
+html[data-tema="contraste"] hr { color: #fff; opacity: 1; }
+html[data-tema="contraste"] .feature { background: #ffeb3b !important; color: #000 !important; }
+
+html[data-tema="contraste"] .navbar {
+    --bs-navbar-color: #fff;
+    --bs-navbar-hover-color: #ffeb3b;
+    --bs-navbar-active-color: #ffeb3b;
+    --bs-navbar-toggler-border-color: #fff;
+    --bs-navbar-toggler-icon-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%23ffffff' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+    border-bottom: 2px solid #ffeb3b;
+}
+html[data-tema="contraste"] footer { border-top: 2px solid #ffeb3b; }
+
+html[data-tema="contraste"] .card { --bs-card-bg: #000; --bs-card-border-color: #fff; --bs-card-color: #fff; color: #fff; border: 2px solid #fff !important; }
+html[data-tema="contraste"] .form-control,
+html[data-tema="contraste"] .form-select { background-color: #000; color: #fff; border: 2px solid #fff; }
+html[data-tema="contraste"] .form-select {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+}
+html[data-tema="contraste"] .form-control:focus,
+html[data-tema="contraste"] .form-select:focus { background-color: #000; color: #fff; border-color: #ffeb3b; box-shadow: 0 0 0 0.25rem rgba(255, 235, 59, 0.45); }
+html[data-tema="contraste"] .form-floating > label { color: #fff; }
+html[data-tema="contraste"] .form-control.is-invalid,
+html[data-tema="contraste"] .form-select.is-invalid { border-color: #ff8a8a; }
+html[data-tema="contraste"] .invalid-feedback { color: #ff8a8a; }
+
+html[data-tema="contraste"] .btn-primary {
+    --bs-btn-color: #000;
+    --bs-btn-bg: #ffeb3b;
+    --bs-btn-border-color: #fff;
+    --bs-btn-hover-color: #000;
+    --bs-btn-hover-bg: #fff;
+    --bs-btn-hover-border-color: #ffeb3b;
+    --bs-btn-active-color: #000;
+    --bs-btn-active-bg: #fff;
+    --bs-btn-active-border-color: #ffeb3b;
+}
+html[data-tema="contraste"] .btn-outline-primary {
+    --bs-btn-color: #ffeb3b;
+    --bs-btn-border-color: #ffeb3b;
+    --bs-btn-hover-color: #000;
+    --bs-btn-hover-bg: #ffeb3b;
+    --bs-btn-hover-border-color: #ffeb3b;
+    --bs-btn-active-color: #000;
+    --bs-btn-active-bg: #ffeb3b;
+    --bs-btn-active-border-color: #fff;
+}
+html[data-tema="contraste"] .accordion {
+    --bs-accordion-color: #fff;
+    --bs-accordion-bg: #000;
+    --bs-accordion-border-color: #fff;
+    --bs-accordion-btn-color: #fff;
+    --bs-accordion-btn-bg: #000;
+    --bs-accordion-active-color: #ffeb3b;
+    --bs-accordion-active-bg: #000;
+    --bs-accordion-btn-icon: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23ffffff'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+    --bs-accordion-btn-active-icon: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23ffeb3b'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+}
+html[data-tema="contraste"] .alert-success { --bs-alert-color: #fff; --bs-alert-bg: #000; --bs-alert-border-color: #ffeb3b; border-width: 2px; }
+html[data-tema="contraste"] .alert-danger { --bs-alert-color: #fff; --bs-alert-bg: #000; --bs-alert-border-color: #ff8a8a; border-width: 2px; }
+html[data-tema="contraste"] .progress { --bs-progress-bg: #333; --bs-progress-bar-bg: #ffeb3b; --bs-progress-bar-color: #000; border: 1px solid #fff; }
