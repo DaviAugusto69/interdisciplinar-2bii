@@ -23,7 +23,8 @@
             <div class="account-nav-links">
                 <a href="<?= e(url('pages/index')) ?>">Início</a>
                 <a href="<?= e(url('pages/index')) ?>#sobre-eda">Sobre o EDA</a>
-                <a href="<?= e(url('pages/resume')) ?>">Aprender</a>
+                <a href="<?= e(url('pages/painel')) ?>">Aprender</a>
+                <a class="account-primary" href="<?= e(url('pages/painel')) ?>">Progresso</a>
                 <a class="account-primary" href="<?= e(url('pages/login')) ?>">Entrar</a>
             </div>
         </div>
@@ -41,7 +42,7 @@
                                 <div class="fs-3 fw-light text-muted">Aprenda no seu próprio ritmo</div>
                                 <h1 class="display-3 fw-bolder mb-5"><span class="text-gradient d-inline">A tecnologia não tem idade</span></h1>
                                 <div class="d-grid gap-3 d-sm-flex justify-content-sm-center justify-content-xxl-start mb-3">
-                                    <a class="btn btn-primary btn-lg px-3 py-3 me-sm-3 fs-6 fw-bolder text-nowrap" href="<?= e(url('pages/resume')) ?>">Começar a aprender</a>
+                                    <a class="btn btn-primary btn-lg px-3 py-3 me-sm-3 fs-6 fw-bolder text-nowrap" href="<?= e(url('pages/painel')) ?>">Começar a aprender</a>
                                     <a class="btn btn-outline-dark btn-lg px-3 py-3 fs-6 fw-bolder text-nowrap" href="<?= e(url('pages/index')) ?>#sobre-eda">Conheça o projeto</a>
                                 </div>
                             </div>

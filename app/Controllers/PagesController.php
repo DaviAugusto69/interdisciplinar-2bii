@@ -40,6 +40,13 @@ class PagesController
         ]);
     }
 
+    public function painel(): void
+    {
+        $this->render('pages/painel', [
+            'title' => 'Meu painel | EDA',
+        ]);
+    }
+
     public function resume(): void
     {
 	
