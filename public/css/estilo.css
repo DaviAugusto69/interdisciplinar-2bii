@@ -162,6 +162,11 @@ a:focus-visible {
     fill: var(--palette-blue);
 }
 
+.profile .profile-img {
+    -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 91%, transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 0%, #000 91%, transparent 100%);
+}
+
 .form-control,
 .form-select {
     color: var(--palette-deep);
