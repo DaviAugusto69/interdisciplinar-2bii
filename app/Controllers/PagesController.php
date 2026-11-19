@@ -39,6 +39,13 @@ class PagesController
         ]);
     }
 
+    public function termos(): void
+    {
+        $this->render('pages/termos', [
+            'title' => 'Termos de Uso',
+        ]);
+    }
+
     private function csrfToken(): string
     {
         session_status() === PHP_SESSION_NONE && session_start();

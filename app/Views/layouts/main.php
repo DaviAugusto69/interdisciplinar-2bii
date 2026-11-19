@@ -202,7 +202,7 @@
                     <div class="col-auto">
                         <a class="small" href="#!">Privacy</a>
                         <span class="mx-1">&middot;</span>
-                        <a class="small" href="#!">Termos</a>
+                        <a class="small" href="<?= e(url('pages/termos')) ?>">Termos</a>
                         <span class="mx-1">&middot;</span>
                         <a class="small" href="#!">Contato</a>
                         
