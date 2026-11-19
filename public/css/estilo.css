@@ -234,9 +234,8 @@ input {
 }
 
 .lista li {
-    margin: 0.5rem 0;
+    margin: 0.5rem 0
 }
-<<<<<<< HEAD
 /* ==========================================================================
    PREFERÊNCIAS DO USUÁRIO (páginas Perfil e configurações / Ajuda e suporte)
    O PHP escreve data-fonte e data-tema no <html> (layouts/main.php).
@@ -322,6 +321,33 @@ html[data-tema="escuro"] .alert-success { --bs-alert-color: #a3e4c0; --bs-alert-
 html[data-tema="escuro"] .alert-danger { --bs-alert-color: #ffb3bb; --bs-alert-bg: #3a1419; --bs-alert-border-color: #6b2630; }
 html[data-tema="escuro"] .progress { --bs-progress-bg: #343a40; --bs-progress-bar-bg: #8c97ff; --bs-progress-bar-color: #000; }
 
+
+/* FUNDO E CORES GERAIS DO TEMA ESCURO */
+html[data-tema="escuro"] {
+    color-scheme: dark;
+}
+
+html[data-tema="escuro"] body {
+    background-color: #121212;
+    color: #e9ecef;
+}
+
+html[data-tema="escuro"] .bg-white,
+html[data-tema="escuro"] .bg-light {
+    background-color: #1b1e23 !important;
+    color: #e9ecef !important;
+}
+
+html[data-tema="escuro"] .text-muted {
+    color: #adb5bd !important;
+}
+
+html[data-tema="escuro"] footer {
+    background-color: #1b1e23 !important;
+    color: #e9ecef;
+}
+
+
 /* ==========================================================================
    TEMA DE ALTO CONTRASTE (preto, branco e amarelo)
    ========================================================================== */
@@ -397,7 +423,7 @@ html[data-tema="contraste"] .accordion {
 html[data-tema="contraste"] .alert-success { --bs-alert-color: #fff; --bs-alert-bg: #000; --bs-alert-border-color: #ffeb3b; border-width: 2px; }
 html[data-tema="contraste"] .alert-danger { --bs-alert-color: #fff; --bs-alert-bg: #000; --bs-alert-border-color: #ff8a8a; border-width: 2px; }
 html[data-tema="contraste"] .progress { --bs-progress-bg: #333; --bs-progress-bar-bg: #ffeb3b; --bs-progress-bar-color: #000; border: 1px solid #fff; }
-=======
+
 
 .eda-about-section {
     position: relative;
@@ -1321,4 +1347,4 @@ html[data-tema="contraste"] .progress { --bs-progress-bg: #333; --bs-progress-ba
         grid-template-columns: 1fr;
     }
 }
->>>>>>> 645834f8866fc2581c520fe046b3de8c02d648e7
+
