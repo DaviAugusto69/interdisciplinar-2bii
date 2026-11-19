@@ -31,7 +31,7 @@
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav ms-auto mb-2 mb-lg-0 small fw-bolder">
-                            <li class="nav-item"><a class="nav-link" href="<?= e(url('pages/index')) ?>">Home</a></li>
+                            <li class="nav-item"><a class="nav-link" href="<?= e(url('pages/index')) ?>">Inicio</a></li>
                             <li class="nav-item"><a class="nav-link" href="<?= e(url('pages/resume')) ?>">Resume</a></li>
                             <li class="nav-item"><a class="nav-link" href="<?= e(url('pages/projects')) ?>">Projects</a></li>
                             <li class="nav-item"><a class="nav-link" href="<?= e(url('pages/contact')) ?>">Cadastro</a></li>
@@ -48,7 +48,7 @@
                         <div class="col-xxl-5">
                             <!-- Header text content-->
                             <div class="text-center text-xxl-start">
-                                <div class="badge bg-gradient-primary-to-secondary text-white mb-4"><div class="text-uppercase">Design &middot; Development &middot; Marketing</div></div>
+                                <div class="badge bg-gradient-primary-to-secondary text-white mb-4"><div class="text-uppercase">Educação &middot; Digital &middot; Acessível</div></div>
                                 <div class="fs-3 fw-light text-muted">I can help your business to</div>
                                 <h1 class="display-3 fw-bolder mb-5"><span class="text-gradient d-inline">Get online and grow fast</span></h1>
                                 <div class="d-grid gap-3 d-sm-flex justify-content-sm-center justify-content-xxl-start mb-3">
@@ -198,13 +198,13 @@
  <footer class="bg-white py-4 mt-auto">
             <div class="container px-5">
                 <div class="row align-items-center justify-content-between flex-column flex-sm-row">
-                    <div class="col-auto"><div class="small m-0">Copyright &copy; Your Website 2023</div></div>
+                    <div class="col-auto"><div class="small m-0">Copyright &copy; Your Website 2026</div></div>
                     <div class="col-auto">
                         <a class="small" href="#!">Privacy</a>
                         <span class="mx-1">&middot;</span>
-                        <a class="small" href="#!">Terms</a>
+                        <a class="small" href="#!">Termos</a>
                         <span class="mx-1">&middot;</span>
-                        <a class="small" href="#!">Contact</a>
+                        <a class="small" href="#!">Contato</a>
                         
                     </div>
                 </div>
