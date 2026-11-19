@@ -511,14 +511,15 @@ input {
 }
 
 .account-options a {
-    flex: 0 1 12rem;
+    flex: 0 1 10.8rem;
     border-radius: .75rem;
     font-weight: 800;
     text-align: center;
     display: grid;
     place-items: center;
-    padding: .65rem .4rem;
+    padding: .585rem .36rem;
     border: 1px solid transparent;
+    font-size: .9em;
     text-decoration: none;
 }
 
