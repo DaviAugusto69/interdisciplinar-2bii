@@ -10,7 +10,7 @@ class PagesController
     {
 	
         $this->render('pages/index', [
-            'title' => 'Inicio',
+            'title' => 'Início',
             'showHero' => true,
         ]);
     }
@@ -19,7 +19,7 @@ class PagesController
     {
 	
         $this->render('pages/contact', [
-            'title' => 'Crie sua conta | EDA',
+            'title' => 'Cadastro',
             'accountPage' => 'contact',
         ]);
     }
@@ -27,7 +27,7 @@ class PagesController
     public function login(): void
     {
         $this->render('pages/login', [
-            'title' => 'Entrar | EDA',
+            'title' => 'Entrar',
             'accountPage' => 'login',
         ]);
     }
@@ -35,7 +35,7 @@ class PagesController
     public function recoverPassword(): void
     {
         $this->render('pages/recover-password', [
-            'title' => 'Recuperar senha | EDA',
+            'title' => 'Recuperar senha',
             'accountPage' => 'recoverPassword',
         ]);
     }
@@ -43,7 +43,7 @@ class PagesController
     public function painel(): void
     {
         $this->render('pages/painel', [
-            'title' => 'Meu painel | EDA',
+            'title' => 'Meu painel',
         ]);
     }
 

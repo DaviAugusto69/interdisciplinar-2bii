@@ -864,6 +864,26 @@ input {
     font-weight: 800;
 }
 
+@media (prefers-reduced-motion: no-preference) {
+    .learning-progress .btn,
+    .learning-card a .bi {
+        display: inline-block;
+        transition: transform 180ms ease;
+    }
+
+    .learning-progress .btn:is(:hover, :focus-visible) {
+        transform: translateY(-3px);
+    }
+
+    .learning-progress .btn:active {
+        transform: translateY(0) scale(.98);
+    }
+
+    .learning-card a:is(:hover, :focus-visible) .bi {
+        transform: translateX(.3rem);
+    }
+}
+
 .learning-support {
     align-items: center;
     margin-top: 1.5rem;
