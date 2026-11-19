@@ -77,7 +77,7 @@
                     </section>
 
                     <section class="mb-4">
-                        <h2 class="h4 fw-bold">7. Privacidade e dados pessoais</h2>
+                        <h2 id="privacidade" class="h4 fw-bold">7. Privacidade e dados pessoais</h2>
                         <p class="text-muted mb-0">
                             O tratamento de dados pessoais relacionado ao uso do EDA deve observar a legislação aplicável,
                             incluindo a Lei Geral de Proteção de Dados Pessoais (LGPD). Para solicitar informações sobre
