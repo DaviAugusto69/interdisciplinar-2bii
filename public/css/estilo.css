@@ -48,6 +48,20 @@ a:focus-visible {
     background-color: var(--palette-ice) !important;
 }
 
+.site-logo {
+    display: block;
+    width: auto;
+    height: 4rem;
+    max-width: min(20rem, 65vw);
+    object-fit: contain;
+}
+
+@media (max-width: 575.98px) {
+    .site-logo {
+        height: 3rem;
+    }
+}
+
 .navbar-light .navbar-brand,
 .navbar-light .navbar-nav .nav-link {
     color: var(--palette-deep);
@@ -148,6 +162,11 @@ a:focus-visible {
     fill: var(--palette-blue);
 }
 
+.profile .profile-img {
+    -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 91%, transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 0%, #000 91%, transparent 100%);
+}
+
 .form-control,
 .form-select {
     color: var(--palette-deep);
@@ -217,6 +236,7 @@ input {
 .lista li {
     margin: 0.5rem 0;
 }
+<<<<<<< HEAD
 /* ==========================================================================
    PREFERÊNCIAS DO USUÁRIO (páginas Perfil e configurações / Ajuda e suporte)
    O PHP escreve data-fonte e data-tema no <html> (layouts/main.php).
@@ -377,3 +397,928 @@ html[data-tema="contraste"] .accordion {
 html[data-tema="contraste"] .alert-success { --bs-alert-color: #fff; --bs-alert-bg: #000; --bs-alert-border-color: #ffeb3b; border-width: 2px; }
 html[data-tema="contraste"] .alert-danger { --bs-alert-color: #fff; --bs-alert-bg: #000; --bs-alert-border-color: #ff8a8a; border-width: 2px; }
 html[data-tema="contraste"] .progress { --bs-progress-bg: #333; --bs-progress-bar-bg: #ffeb3b; --bs-progress-bar-color: #000; border: 1px solid #fff; }
+=======
+
+.eda-about-section {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    background-image:
+        radial-gradient(ellipse at 8% 18%, rgba(23, 86, 138, 0.08), transparent 25rem),
+        radial-gradient(ellipse at 92% 68%, rgba(15, 118, 110, 0.08), transparent 28rem);
+}
+
+.eda-about-section::before,
+.eda-about-section::after {
+    position: absolute;
+    z-index: -1;
+    content: "";
+    pointer-events: none;
+}
+
+.eda-about-section::before {
+    top: 3rem;
+    right: max(2rem, calc((100vw - 1320px) / 2));
+    width: 9rem;
+    height: 9rem;
+    border-radius: 50%;
+    background-image: radial-gradient(var(--palette-blue) 2px, transparent 2px);
+    background-size: 1rem 1rem;
+    opacity: 0.22;
+}
+
+.eda-about-section::after {
+    top: 28rem;
+    left: -5rem;
+    width: 15rem;
+    height: 15rem;
+    border: 1px solid rgba(15, 118, 110, 0.22);
+    border-radius: 50%;
+    box-shadow: 0 0 0 1.5rem rgba(15, 118, 110, 0.035), 0 0 0 3rem rgba(15, 118, 110, 0.025);
+}
+
+.eda-about-content {
+    position: relative;
+    z-index: 1;
+}
+
+.eda-about-title,
+.eda-feature-title {
+    position: relative;
+}
+
+.eda-about-title::after {
+    display: block;
+    width: 4rem;
+    height: 0.25rem;
+    margin: 1rem auto 0;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--palette-blue), var(--palette-petroleum));
+    content: "";
+}
+
+.eda-feature-title::after {
+    display: block;
+    width: 3rem;
+    height: 0.2rem;
+    margin: 0.8rem auto 0;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--palette-blue), var(--palette-petroleum));
+    content: "";
+}
+
+.eda-feature-card {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(23, 50, 77, 0.08);
+    box-shadow: 0 0.4rem 1.2rem rgba(23, 50, 77, 0.06) !important;
+    transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+}
+
+.eda-feature-card::before,
+.eda-mission-panel::before {
+    position: absolute;
+    inset: 0 0 auto;
+    height: 0.22rem;
+    background: linear-gradient(90deg, var(--palette-blue), var(--palette-petroleum));
+    content: "";
+}
+
+.eda-feature-card:hover {
+    transform: translateY(-0.35rem);
+    border-color: rgba(23, 86, 138, 0.22);
+    box-shadow: 0 0.9rem 1.8rem rgba(23, 50, 77, 0.12) !important;
+}
+
+.eda-mission-panel {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(23, 50, 77, 0.08);
+    box-shadow: 0 0.75rem 2rem rgba(23, 50, 77, 0.08) !important;
+}
+
+@media (max-width: 575.98px) {
+    .eda-about-section::before {
+        top: 1rem;
+        right: -2rem;
+        opacity: 0.12;
+    }
+
+    .eda-about-section::after {
+        left: -10rem;
+        opacity: 0.5;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .eda-feature-card {
+        transition: none;
+    }
+
+    .eda-feature-card:hover {
+        transform: none;
+    }
+}
+
+:root {
+    --account-blue: #0d4774;
+    --account-text: #123957;
+    --account-muted: #52677a;
+    --account-paper: #fff;
+    --account-ice: #f2f7fa;
+    --account-border: #cdd8e1;
+}
+
+.account-layout {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    color: var(--account-text);
+}
+
+.account-layout main {
+    display: flex;
+    flex: 1;
+}
+
+.account-shell {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    width: min(100% - 2rem, 85rem);
+    margin-inline: auto;
+}
+
+.account-nav {
+    background: var(--account-paper);
+    color: var(--account-text);
+}
+
+.account-nav .account-shell {
+    min-height: 4.75rem;
+}
+
+.account-nav .site-logo {
+    height: 4.25rem;
+}
+
+.account-nav-links,
+.account-options,
+.account-footer-brand,
+.account-access {
+    display: flex;
+    align-items: center;
+}
+
+.account-nav-links {
+    gap: clamp(1rem, 2.25vw, 2.5rem);
+    font-weight: 800;
+}
+
+.account-nav-links a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.account-nav-links a:hover,
+.account-signin a:hover {
+    text-decoration: underline;
+}
+
+.account-layout button {
+    font: inherit;
+    cursor: pointer;
+}
+
+.account-layout :focus-visible,
+.account-nav :focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 3px;
+}
+
+.account-primary {
+    display: grid;
+    place-items: center;
+    padding: .65rem 1.35rem;
+    border: 1px solid transparent;
+    border-radius: .65rem;
+    background: var(--account-blue);
+    color: #fff;
+}
+
+.account-nav-links .account-primary {
+    color: #fff;
+}
+
+.account-primary:is(button, a):hover {
+    filter: brightness(1.17);
+}
+
+.account-page {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    padding: 1.5rem 1rem;
+    background-color: var(--account-ice);
+    background-image:
+        radial-gradient(ellipse 38rem 32rem at -7rem -16rem, #e3eff5 99%, transparent 100%),
+        radial-gradient(ellipse 39rem 32rem at calc(100% + 12rem) calc(100% + 14rem), #e3eff5 99%, transparent 100%);
+}
+
+.account-card {
+    width: min(100%, 46.875rem);
+    padding: .25rem clamp(1rem, 3vw, 2.4rem) 1.25rem;
+    border-radius: 1.5rem;
+    background: var(--account-paper);
+    box-shadow: 0 .55rem 1.4rem rgba(18, 57, 87, .08);
+}
+
+.account-intro,
+.account-signin,
+#account-status {
+    text-align: center;
+}
+
+.account-icon {
+    display: inline-grid;
+    place-items: center;
+    width: 4rem;
+    height: 4rem;
+    border-radius: .7rem;
+    background: linear-gradient(125deg, var(--account-blue), #0c7175);
+    color: #fff;
+    font-size: 2.65rem;
+}
+
+.account-intro h1 {
+    margin: .45rem 0 .35rem;
+    color: var(--account-blue);
+    font-size: clamp(1.85rem, 4vw, 2.5rem);
+    font-weight: 800;
+    letter-spacing: -.04em;
+}
+
+.account-intro p,
+.account-signin {
+    margin-bottom: 0;
+    color: var(--account-muted);
+}
+
+.account-options {
+    align-items: stretch;
+    justify-content: space-around;
+    gap: .5rem;
+    margin: 1.6rem 0 1.15rem;
+}
+
+.account-options a {
+    flex: 0 1 10.8rem;
+    border-radius: .75rem;
+    font-weight: 800;
+    text-align: center;
+    display: grid;
+    place-items: center;
+    padding: .585rem .36rem;
+    border: 1px solid transparent;
+    font-size: .9em;
+    text-decoration: none;
+}
+
+.account-options a:not(.account-primary) {
+    background: var(--account-ice);
+    color: var(--account-text);
+    font-weight: 800;
+}
+
+.account-options a:hover {
+    border-color: var(--account-border);
+}
+
+.account-form {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: .65rem 1.4rem;
+}
+
+.account-wide {
+    grid-column: 1 / -1;
+}
+
+.account-field label {
+    margin: 0 0 .18rem .1rem;
+    font-weight: 800;
+}
+
+.account-input {
+    position: relative;
+}
+
+.account-input i {
+    position: absolute;
+    top: 50%;
+    left: .95rem;
+    transform: translateY(-50%);
+    color: var(--account-muted);
+    font-size: 1.25rem;
+    pointer-events: none;
+}
+
+.account-input input {
+    display: block;
+    min-height: 2.7rem;
+    padding: .55rem .7rem .55rem 2.9rem;
+    border: 1px solid var(--account-border);
+    border-radius: .55rem;
+    background: var(--account-ice);
+    color: var(--account-text);
+    font-size: .9375rem;
+}
+
+.account-input input::placeholder {
+    color: var(--account-muted);
+}
+
+.account-layout .account-submit {
+    min-height: 3.05rem;
+    margin-top: .6rem;
+    font-size: 1.15rem;
+    font-weight: 800;
+}
+
+.account-signin {
+    margin-top: 1.7rem;
+}
+
+.account-access button {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+}
+
+.account-signin a {
+    color: var(--account-blue);
+    font-weight: 800;
+    text-decoration: none;
+}
+
+#account-status {
+    margin: .75rem 0 0;
+    font-weight: 700;
+}
+
+#account-status:empty {
+    margin: 0;
+}
+
+.account-footer {
+    background: linear-gradient(110deg, #0d4774, #0c6870);
+    color: #fff;
+}
+
+.account-footer .account-shell {
+    display: grid;
+    grid-template-columns: auto minmax(18rem, 1fr) auto;
+    gap: clamp(1rem, 2vw, 2rem);
+    min-height: 6.5rem;
+    padding-block: .85rem;
+}
+
+.account-footer-brand img {
+    width: 10rem;
+    max-width: 100%;
+    filter: brightness(0) invert(1);
+}
+
+.account-footer-brand p {
+    margin: 0 0 0 2rem;
+    padding-left: 2rem;
+    border-left: 1px solid currentColor;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+.account-footer-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-width: 0;
+}
+
+.account-copyright {
+    margin: 0;
+    white-space: nowrap;
+}
+
+.account-footer-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .35rem 1rem;
+}
+
+.account-footer-links a {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: .18em;
+}
+
+.account-footer-links a:hover,
+.account-footer-links a:focus-visible {
+    color: #d8f4f2;
+}
+
+.account-access button {
+    min-width: 2.75rem;
+    padding-inline: .9rem;
+    font-size: 1.5rem;
+    line-height: 1.35;
+}
+
+.account-access button + button {
+    border-left: 1px solid currentColor;
+}
+
+.account-contrast {
+    --account-blue: #ffe25b;
+    --account-text: #fff;
+    --account-muted: #fff;
+    --account-paper: #000;
+    --account-ice: #151515;
+    --account-border: #fff;
+}
+
+.account-contrast .account-page,
+.account-contrast .account-icon,
+.account-contrast .account-footer {
+    background: #000;
+}
+
+.account-contrast .account-icon,
+.account-contrast .account-primary,
+.account-contrast .account-nav-links .account-primary {
+    color: #000;
+    background: var(--account-blue);
+}
+
+.account-contrast .account-nav .site-logo {
+    background: #fff;
+    border-radius: .3rem;
+}
+
+.lesson-page {
+    padding: 2rem clamp(1rem, 2vw, 2rem) 3rem;
+    background: #eef5f8;
+}
+
+.lesson-layout {
+    display: grid;
+    grid-template-columns: 8rem minmax(0, 1.7fr) minmax(16rem, 1fr);
+    grid-template-areas: "menu main outline";
+    gap: clamp(.75rem, 2vw, 1.5rem);
+    max-width: 92rem;
+    margin-inline: auto;
+    align-items: start;
+}
+
+.lesson-menu,
+.lesson-outline,
+.lesson-help {
+    padding: 1rem;
+    border-radius: 1rem;
+    background: #fff;
+    box-shadow: 0 .25rem 1rem #17324d0a;
+}
+
+.lesson-menu {
+    grid-area: menu;
+    align-self: stretch;
+    padding: .5rem;
+}
+
+.lesson-outline {
+    grid-area: outline;
+    padding: clamp(1rem, 2vw, 1.75rem);
+}
+
+.lesson-menu a,
+.lesson-outline nav a {
+    display: flex;
+    align-items: center;
+    gap: .65rem;
+    padding: .8rem;
+    border-radius: .7rem;
+    color: var(--account-blue);
+    font-weight: 800;
+    text-decoration: none;
+}
+
+.lesson-menu a {
+    flex-direction: column;
+    text-align: center;
+}
+
+.lesson-menu .bi,
+.lesson-outline nav .bi {
+    font-size: 1.5rem;
+}
+
+.lesson-menu a[aria-current="page"] {
+    background: var(--account-blue);
+    color: #fff;
+}
+
+.lesson-outline h1 {
+    color: var(--account-blue);
+    font-size: clamp(1.5rem, 3vw, 2.5rem);
+    font-weight: 800;
+}
+
+.lesson-position {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .5rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+.lesson-position progress {
+    flex: 1 1 7rem;
+    min-width: 0;
+    accent-color: var(--palette-petroleum);
+}
+
+.lesson-outline nav {
+    display: grid;
+    gap: .5rem;
+}
+
+.lesson-outline nav a {
+    border: 1px solid #e1eaf0;
+}
+
+.lesson-outline nav a:is(:hover, [aria-current="page"]),
+.lesson-menu a:not([aria-current="page"]):hover {
+    background: #dceef9;
+}
+
+.lesson-main {
+    grid-area: main;
+    min-width: 0;
+}
+
+.lesson-main h2 {
+    margin-bottom: .65rem;
+    font-size: 1.25rem;
+    font-weight: 800;
+}
+
+.lesson-video {
+    display: grid;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    place-items: center;
+    border-radius: 1rem;
+    background: linear-gradient(135deg, #102d46, #0d5270);
+    color: #fff;
+}
+
+.lesson-video video {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    background: #000;
+}
+
+.lesson-placeholder {
+    padding: 1rem;
+    text-align: center;
+}
+
+.lesson-placeholder .bi {
+    font-size: clamp(1.75rem, 5vw, 3rem);
+}
+
+.lesson-placeholder p {
+    margin: .5rem 0 0;
+}
+
+.lesson-controls {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: .75rem;
+    margin-block: 1rem;
+}
+
+.lesson-controls .btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem;
+    padding: .75rem .5rem;
+    border-radius: .75rem;
+    font-weight: 800;
+}
+
+.lesson-help summary {
+    color: var(--account-blue);
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.lesson-help p {
+    margin: .75rem 0 0;
+}
+
+@media (max-width: 991.98px) {
+    .lesson-layout {
+        grid-template-columns: minmax(0, 1fr) minmax(14rem, .7fr);
+        grid-template-areas: "menu menu" "main outline";
+    }
+
+    .lesson-menu {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 639.98px) {
+    .lesson-layout {
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-areas: "menu" "main" "outline";
+    }
+}
+
+.learning-panel {
+    padding-block: 2rem 3rem;
+    background: linear-gradient(150deg, #edf5f9, var(--palette-ice) 65%);
+}
+
+.learning-panel h1,
+.learning-panel h2,
+.learning-panel h3 {
+    font-weight: 800;
+}
+
+.learning-intro {
+    margin-bottom: 1.5rem;
+}
+
+.learning-intro p:first-child {
+    margin-bottom: .25rem;
+    color: var(--palette-petroleum);
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.learning-intro p:last-child,
+.learning-modules > p,
+.learning-card p,
+.learning-support p,
+.learning-activity p {
+    color: #52677a;
+}
+
+.learning-progress {
+    display: grid;
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+    align-items: end;
+    overflow: hidden;
+    border-radius: 1.25rem;
+    background: radial-gradient(circle at 84% 105%, #168588 0 27%, transparent 27.5%),
+        linear-gradient(110deg, #0d4774, #0c6870);
+    color: #fff;
+}
+
+.learning-progress-content {
+    padding: clamp(1.25rem, 3vw, 2.5rem);
+}
+
+.learning-progress h2 {
+    display: inline-block;
+    padding: .4rem 1rem;
+    border-radius: 2rem;
+    background: #e4f6fb;
+    color: #0d5579;
+    font-size: .95rem;
+    text-transform: uppercase;
+}
+
+.learning-progress p {
+    margin: .65rem 0;
+    font-size: clamp(1.15rem, 2.2vw, 1.7rem);
+}
+
+.learning-meter {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: .5rem 1rem;
+    margin-bottom: 1.25rem;
+}
+
+.learning-meter progress {
+    flex: 1 1 9rem;
+    min-width: 0;
+    height: 1rem;
+    accent-color: #fff;
+}
+
+.learning-progress img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.learning-progress .btn {
+    padding: .7rem 1rem;
+    border-radius: .7rem;
+    color: #0d4774;
+}
+
+.learning-modules,
+.learning-activities {
+    margin-top: 1.5rem;
+}
+
+.learning-modules h2,
+.learning-activities h2 {
+    margin-bottom: .25rem;
+    font-size: 1.5rem;
+}
+
+.learning-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.learning-card,
+.learning-activity {
+    padding: 1.2rem;
+    border: 1px solid #dfe8ed;
+    border-radius: 1rem;
+    background: #fff;
+}
+
+.learning-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.learning-card-heading,
+.learning-support {
+    display: flex;
+    align-items: flex-start;
+    gap: .85rem;
+}
+
+.learning-icon {
+    display: grid;
+    flex-shrink: 0;
+    place-items: center;
+    width: 3rem;
+    height: 3rem;
+    border-radius: .85rem;
+    background: var(--palette-blue);
+    color: #fff;
+    font-size: 1.4rem;
+}
+
+.learning-card:nth-child(even) .learning-icon {
+    background: var(--palette-petroleum);
+}
+
+.learning-card h3,
+.learning-activity h3 {
+    font-size: 1.125rem;
+}
+
+.learning-card p,
+.learning-support p,
+.learning-activity p {
+    margin-bottom: 0;
+}
+
+.learning-card a {
+    color: var(--palette-petroleum);
+    font-weight: 800;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .learning-progress .btn,
+    .learning-card a .bi {
+        display: inline-block;
+        transition: transform 180ms ease;
+    }
+
+    .learning-progress .btn:is(:hover, :focus-visible) {
+        transform: translateY(-3px);
+    }
+
+    .learning-progress .btn:active {
+        transform: translateY(0) scale(.98);
+    }
+
+    .learning-card a:is(:hover, :focus-visible) .bi {
+        transform: translateX(.3rem);
+    }
+}
+
+.learning-support {
+    align-items: center;
+    margin-top: 1.5rem;
+    padding: 1rem 1.25rem;
+    border-radius: 1rem;
+    background: #e3f4f5;
+}
+
+.learning-support i {
+    color: var(--palette-petroleum);
+    font-size: 1.8rem;
+}
+
+.learning-activity {
+    margin-top: .75rem;
+}
+
+.learning-activity:target {
+    border-color: var(--palette-petroleum);
+}
+
+@media (max-width: 1199.98px) {
+    .learning-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 575.98px) {
+    .learning-grid,
+    .learning-progress {
+        grid-template-columns: 1fr;
+    }
+
+    .learning-progress img {
+        justify-self: end;
+        max-width: 20rem;
+    }
+}
+
+@media (max-width: 1100px) {
+    .account-footer .account-shell {
+        grid-template-columns: 1fr;
+        justify-items: center;
+        gap: .8rem;
+        padding-block: 1rem;
+    }
+
+    .account-footer-meta {
+        flex-direction: column;
+        gap: .45rem;
+        text-align: center;
+    }
+
+    .account-footer-links {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 660px) {
+    .account-nav .account-shell {
+        justify-content: center;
+        flex-wrap: wrap;
+        padding-block: .5rem;
+    }
+
+    .account-nav-links {
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: .6rem 1rem;
+    }
+
+    .account-footer-brand {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: .75rem;
+        text-align: center;
+    }
+
+    .account-footer-brand p {
+        margin: 0;
+        padding: 0;
+        border: 0;
+    }
+
+    .account-form {
+        grid-template-columns: 1fr;
+    }
+}
+>>>>>>> 645834f8866fc2581c520fe046b3de8c02d648e7
