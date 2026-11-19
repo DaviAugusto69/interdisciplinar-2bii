@@ -42,7 +42,7 @@
                                 <h1 class="display-3 fw-bolder mb-5"><span class="text-gradient d-inline">A tecnologia não tem idade</span></h1>
                                 <div class="d-grid gap-3 d-sm-flex justify-content-sm-center justify-content-xxl-start mb-3">
                                     <a class="btn btn-primary btn-lg px-3 py-3 me-sm-3 fs-6 fw-bolder text-nowrap" href="<?= e(url('pages/resume')) ?>">Começar a aprender</a>
-                                    <a class="btn btn-outline-dark btn-lg px-3 py-3 fs-6 fw-bolder text-nowrap" href="<?= e(url('pages/projects')) ?>">Conheça o projeto</a>
+                                    <a class="btn btn-outline-dark btn-lg px-3 py-3 fs-6 fw-bolder text-nowrap" href="<?= e(url('pages/index')) ?>#sobre-eda">Conheça o projeto</a>
                                 </div>
                             </div>
                         </div>
@@ -220,7 +220,7 @@
                     <div class="col-auto">
                         <a class="small" href="#!">Privacy</a>
                         <span class="mx-1">&middot;</span>
-                        <a class="small" href="#!">Termos</a>
+                        <a class="small" href="<?= e(url('pages/termos')) ?>">Termos</a>
                         <span class="mx-1">&middot;</span>
                         <a class="small" href="#!">Contato</a>
                         
