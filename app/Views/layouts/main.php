@@ -184,55 +184,42 @@
     
         <!-- Rodapé Bootstrap -->
 
-    <?php if (!empty($accountPage)): ?>
-        <footer class="account-footer">
-            <div class="account-shell">
-                <div class="account-footer-brand">
-                    <img src="<?= e(asset('assets/logo-eda.png')) ?>" alt="EDA Educação Digital">
-                    <p>Tecnologia, aprendizado e autonomia<br> para todas as idades.</p>
-                </div>
-                <div class="account-access" role="group" aria-label="Acessibilidade">
-                    <button type="button" data-font-step="-0.1" aria-label="Diminuir texto">A−</button>
-                    <button type="button" data-font-step="0.1" aria-label="Aumentar texto">A+</button>
-                    <button type="button" id="account-contrast" aria-label="Alto contraste" aria-pressed="false"><i class="bi bi-universal-access-circle" aria-hidden="true"></i></button>
-                </div>
+    <footer class="account-footer">
+        <div class="account-shell">
+            <div class="account-footer-brand">
+                <img src="<?= e(asset('assets/logo-eda.png')) ?>" alt="EDA Educação Digital">
+                <p>Tecnologia, aprendizado e autonomia<br> para todas as idades.</p>
             </div>
-        </footer>
-        <script>
-            let accountFontScale = 1;
-            document.querySelectorAll('[data-font-step]').forEach((button) => {
-                button.addEventListener('click', () => {
-                    accountFontScale = Math.min(1.4, Math.max(0.9, accountFontScale + Number(button.dataset.fontStep)));
-                    document.documentElement.style.fontSize = (accountFontScale * 100) + '%';
-                });
-            });
-
-            const contrastButton = document.getElementById('account-contrast');
-            contrastButton.addEventListener('click', () => {
-                const enabled = document.body.classList.toggle('account-contrast');
-                contrastButton.setAttribute('aria-pressed', String(enabled));
-            });
-        </script>
-    <?php else: ?>
-        <footer class="bg-white py-4 mt-auto">
-            <div class="container px-5">
-                <div class="row align-items-center justify-content-between flex-column flex-sm-row">
-                    <div class="col-auto"><div class="small m-0">Copyright &copy; Your Website 2026</div></div>
-                    <div class="col-auto">
-                        <a class="small" href="#!">Privacy</a>
-                        <span class="mx-1">&middot;</span>
-                        <a class="small" href="<?= e(url('pages/termos')) ?>">Termos</a>
-                        <span class="mx-1">&middot;</span>
-                        <a class="small" href="#!">Contato</a>
-                        
-                    </div>
-                </div>
+            <div class="account-footer-meta">
+                <p class="account-copyright">Copyright &copy; EDA 2026</p>
+                <nav class="account-footer-links" aria-label="Links institucionais">
+                    <a href="<?= e(url('pages/termos#privacidade')) ?>">Privacidade</a>
+                    <a href="<?= e(url('pages/termos')) ?>">Termos</a>
+                    <a href="<?= e(url('pages/contact')) ?>">Contato</a>
+                </nav>
             </div>
-        </footer>
-    <?php endif; ?>
+            <div class="account-access" role="group" aria-label="Acessibilidade">
+                <button type="button" data-font-step="-0.1" aria-label="Diminuir texto">A−</button>
+                <button type="button" data-font-step="0.1" aria-label="Aumentar texto">A+</button>
+                <button type="button" id="account-contrast" aria-label="Alto contraste" aria-pressed="false"><i class="bi bi-universal-access-circle" aria-hidden="true"></i></button>
+            </div>
+        </div>
+    </footer>
+    <script>
+        let accountFontScale = 1;
+        document.querySelectorAll('[data-font-step]').forEach((button) => {
+            button.addEventListener('click', () => {
+                accountFontScale = Math.min(1.4, Math.max(0.9, accountFontScale + Number(button.dataset.fontStep)));
+                document.documentElement.style.fontSize = (accountFontScale * 100) + '%';
+            });
+        });
 
-    
-
+        const contrastButton = document.getElementById('account-contrast');
+        contrastButton.addEventListener('click', () => {
+            const enabled = document.body.classList.toggle('account-contrast');
+            contrastButton.setAttribute('aria-pressed', String(enabled));
+        });
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="<?= e(asset('js/scripts.js')) ?>"></script>
 
