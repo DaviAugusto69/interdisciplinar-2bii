@@ -1,0 +1,13 @@
+USE meu_mvc;
+
+ALTER TABLE users
+  ADD COLUMN phone VARCHAR(32) NULL,
+  ADD COLUMN password_hash VARCHAR(255) NULL;
+
+CREATE TABLE IF NOT EXISTS support_messages (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  email VARCHAR(150) NOT NULL,
+  subject VARCHAR(50) NOT NULL,
+  message TEXT NOT NULL
+);

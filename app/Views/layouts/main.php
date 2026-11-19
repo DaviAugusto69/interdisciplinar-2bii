@@ -1,5 +1,6 @@
+<?php $eda = prefs(); ?>
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-fonte="<?= e($eda['fonte']) ?>" data-tema="<?= e($eda['tema']) ?>">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -24,6 +25,8 @@
                 <a href="<?= e(url('pages/index')) ?>">Início</a>
                 <a href="<?= e(url('pages/index')) ?>#sobre-eda">Sobre o EDA</a>
                 <a href="<?= e(url('pages/aprendizagem')) ?>">Aprender</a>
+                <a href="<?= e(url('pages/help')) ?>">Ajuda</a>
+                <a href="<?= e(url('pages/profile')) ?>">Perfil</a>
                 <a class="account-primary" href="<?= e(url('pages/painel')) ?>">Progresso</a>
                 <a class="account-primary" href="<?= e(url('pages/login')) ?>">Entrar</a>
             </div>
