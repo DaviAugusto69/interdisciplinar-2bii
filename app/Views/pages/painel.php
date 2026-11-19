@@ -27,7 +27,7 @@ $modules = [
                     <progress value="3" max="10" aria-label="Exemplo de progresso em atividades">30%</progress>
                     <span>30% concluído</span>
                 </div>
-                <a class="btn btn-light fw-bold" href="#modulos">
+                <a class="btn btn-light fw-bold" href="<?= e(url('pages/aprendizagem')) ?>">
                     <i class="bi bi-play" aria-hidden="true"></i> Continuar aprendendo
                 </a>
             </div>
@@ -48,7 +48,7 @@ $modules = [
                                 <p><?= e($description) ?></p>
                             </div>
                         </div>
-                        <a href="#modulo-<?= e($id) ?>" aria-label="Acessar módulo <?= e($name) ?>">
+                        <a href="<?= e($id === 'celular' ? url('pages/aprendizagem') : '#modulo-' . $id) ?>" aria-label="Acessar módulo <?= e($name) ?>">
                             Acessar módulo <i class="bi bi-arrow-right" aria-hidden="true"></i>
                         </a>
                     </article>

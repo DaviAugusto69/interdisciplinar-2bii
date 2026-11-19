@@ -47,6 +47,28 @@ class PagesController
         ]);
     }
 
+    public function aprendizagem(): void
+    {
+        $lessons = [
+            ['introducao-ao-celular', 'Introdução ao celular', 'play-btn'],
+            ['conhecendo-a-tela', 'Conhecendo a tela', 'phone'],
+            ['fazendo-uma-ligacao', 'Fazendo uma ligação', 'telephone'],
+            ['salvando-contatos', 'Salvando contatos', 'people'],
+            ['revisao-da-aula', 'Revisão da aula', 'check-circle'],
+        ];
+        $requestedLesson = $_GET['aula'] ?? '';
+        $lessonIndex = array_search($requestedLesson, array_column($lessons, 0), true);
+        $lessonIndex = $lessonIndex === false ? 0 : $lessonIndex;
+        $videoPath = 'assets/' . $lessons[$lessonIndex][0] . '.mp4';
+
+        $this->render('pages/aprendizagem', [
+            'title' => 'Aprendizagem',
+            'lessons' => $lessons,
+            'lessonIndex' => $lessonIndex,
+            'videoPath' => is_file(__DIR__ . '/../../public/' . $videoPath) ? $videoPath : null,
+        ]);
+    }
+
     public function resume(): void
     {
 	
