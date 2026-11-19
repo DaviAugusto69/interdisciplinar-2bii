@@ -36,4 +36,13 @@ class User
         $stmt->execute([$name, $email]);
         return (int) Database::connect()->lastInsertId();
     }
+    
+
+public static function count(): int
+{
+    return (int) Database::connect()
+        ->query('SELECT COUNT(*) FROM users')
+        ->fetchColumn();
+}
+
 }

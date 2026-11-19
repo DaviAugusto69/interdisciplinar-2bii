@@ -2,6 +2,7 @@
 namespace App\Controllers;
 
 use App\Models\User;
+use App\Models\Lesson;
 use App\Validators\UserValidator;
 
 class PagesController
@@ -49,13 +50,7 @@ class PagesController
 
     public function aprendizagem(): void
     {
-        $lessons = [
-            ['introducao-ao-celular', 'Introdução ao celular', 'play-btn'],
-            ['conhecendo-a-tela', 'Conhecendo a tela', 'phone'],
-            ['fazendo-uma-ligacao', 'Fazendo uma ligação', 'telephone'],
-            ['salvando-contatos', 'Salvando contatos', 'people'],
-            ['revisao-da-aula', 'Revisão da aula', 'check-circle'],
-        ];
+        $lessons = Lesson::all();
         $requestedLesson = $_GET['aula'] ?? '';
         $lessonIndex = array_search($requestedLesson, array_column($lessons, 0), true);
         $lessonIndex = $lessonIndex === false ? 0 : $lessonIndex;
