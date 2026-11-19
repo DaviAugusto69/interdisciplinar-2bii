@@ -352,3 +352,348 @@ input {
         transform: none;
     }
 }
+
+:root {
+    --account-blue: #0d4774;
+    --account-text: #123957;
+    --account-muted: #52677a;
+    --account-paper: #fff;
+    --account-ice: #f2f7fa;
+    --account-border: #cdd8e1;
+}
+
+.account-layout {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    color: var(--account-text);
+}
+
+.account-layout main {
+    display: flex;
+    flex: 1;
+}
+
+.account-shell {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    width: min(100% - 2rem, 85rem);
+    margin-inline: auto;
+}
+
+.account-nav {
+    background: var(--account-paper);
+    color: var(--account-text);
+}
+
+.account-nav .account-shell {
+    min-height: 4.75rem;
+}
+
+.account-nav .site-logo {
+    height: 4.25rem;
+}
+
+.account-nav-links,
+.account-options,
+.account-footer-brand,
+.account-access {
+    display: flex;
+    align-items: center;
+}
+
+.account-nav-links {
+    gap: clamp(1rem, 2.25vw, 2.5rem);
+    font-weight: 800;
+}
+
+.account-nav-links a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.account-nav-links a:hover,
+.account-signin a:hover {
+    text-decoration: underline;
+}
+
+.account-layout button {
+    font: inherit;
+    cursor: pointer;
+}
+
+.account-layout :focus-visible,
+.account-nav :focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 3px;
+}
+
+.account-primary {
+    display: grid;
+    place-items: center;
+    padding: .65rem 1.35rem;
+    border: 1px solid transparent;
+    border-radius: .65rem;
+    background: var(--account-blue);
+    color: #fff;
+}
+
+.account-nav-links .account-primary {
+    color: #fff;
+}
+
+.account-primary:is(button, a):hover {
+    filter: brightness(1.17);
+}
+
+.account-page {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    padding: 1.5rem 1rem;
+    background-color: var(--account-ice);
+    background-image:
+        radial-gradient(ellipse 38rem 32rem at -7rem -16rem, #e3eff5 99%, transparent 100%),
+        radial-gradient(ellipse 39rem 32rem at calc(100% + 12rem) calc(100% + 14rem), #e3eff5 99%, transparent 100%);
+}
+
+.account-card {
+    width: min(100%, 46.875rem);
+    padding: .25rem clamp(1rem, 3vw, 2.4rem) 1.25rem;
+    border-radius: 1.5rem;
+    background: var(--account-paper);
+    box-shadow: 0 .55rem 1.4rem rgba(18, 57, 87, .08);
+}
+
+.account-intro,
+.account-signin,
+#account-status {
+    text-align: center;
+}
+
+.account-icon {
+    display: inline-grid;
+    place-items: center;
+    width: 4rem;
+    height: 4rem;
+    border-radius: .7rem;
+    background: linear-gradient(125deg, var(--account-blue), #0c7175);
+    color: #fff;
+    font-size: 2.65rem;
+}
+
+.account-intro h1 {
+    margin: .45rem 0 .35rem;
+    color: var(--account-blue);
+    font-size: clamp(1.85rem, 4vw, 2.5rem);
+    font-weight: 800;
+    letter-spacing: -.04em;
+}
+
+.account-intro p,
+.account-signin {
+    margin-bottom: 0;
+    color: var(--account-muted);
+}
+
+.account-options {
+    align-items: stretch;
+    justify-content: space-around;
+    gap: .5rem;
+    margin: 1.6rem 0 1.15rem;
+}
+
+.account-options a {
+    flex: 0 1 12rem;
+    border-radius: .75rem;
+    font-weight: 800;
+    text-align: center;
+    display: grid;
+    place-items: center;
+    padding: .65rem .4rem;
+    border: 1px solid transparent;
+    text-decoration: none;
+}
+
+.account-options a:not(.account-primary) {
+    background: var(--account-ice);
+    color: var(--account-text);
+    font-weight: 800;
+}
+
+.account-options a:hover {
+    border-color: var(--account-border);
+}
+
+.account-form {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: .65rem 1.4rem;
+}
+
+.account-wide {
+    grid-column: 1 / -1;
+}
+
+.account-field label {
+    margin: 0 0 .18rem .1rem;
+    font-weight: 800;
+}
+
+.account-input {
+    position: relative;
+}
+
+.account-input i {
+    position: absolute;
+    top: 50%;
+    left: .95rem;
+    transform: translateY(-50%);
+    color: var(--account-muted);
+    font-size: 1.25rem;
+    pointer-events: none;
+}
+
+.account-input input {
+    display: block;
+    min-height: 2.7rem;
+    padding: .55rem .7rem .55rem 2.9rem;
+    border: 1px solid var(--account-border);
+    border-radius: .55rem;
+    background: var(--account-ice);
+    color: var(--account-text);
+    font-size: .9375rem;
+}
+
+.account-input input::placeholder {
+    color: var(--account-muted);
+}
+
+.account-layout .account-submit {
+    min-height: 3.05rem;
+    margin-top: .6rem;
+    font-size: 1.15rem;
+    font-weight: 800;
+}
+
+.account-signin {
+    margin-top: 1.7rem;
+}
+
+.account-access button {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+}
+
+.account-signin a {
+    color: var(--account-blue);
+    font-weight: 800;
+    text-decoration: none;
+}
+
+#account-status {
+    margin: .75rem 0 0;
+    font-weight: 700;
+}
+
+#account-status:empty {
+    margin: 0;
+}
+
+.account-footer {
+    background: linear-gradient(110deg, #0d4774, #0c6870);
+    color: #fff;
+}
+
+.account-footer .account-shell {
+    min-height: 5.5rem;
+    padding-block: .65rem;
+}
+
+.account-footer-brand img {
+    width: 10rem;
+    max-width: 100%;
+    filter: brightness(0) invert(1);
+}
+
+.account-footer-brand p {
+    margin: 0 0 0 2rem;
+    padding-left: 2rem;
+    border-left: 1px solid currentColor;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+.account-access button {
+    min-width: 2.75rem;
+    padding-inline: .9rem;
+    font-size: 1.5rem;
+    line-height: 1.35;
+}
+
+.account-access button + button {
+    border-left: 1px solid currentColor;
+}
+
+.account-contrast {
+    --account-blue: #ffe25b;
+    --account-text: #fff;
+    --account-muted: #fff;
+    --account-paper: #000;
+    --account-ice: #151515;
+    --account-border: #fff;
+}
+
+.account-contrast .account-page,
+.account-contrast .account-icon,
+.account-contrast .account-footer {
+    background: #000;
+}
+
+.account-contrast .account-icon,
+.account-contrast .account-primary,
+.account-contrast .account-nav-links .account-primary {
+    color: #000;
+    background: var(--account-blue);
+}
+
+.account-contrast .account-nav .site-logo {
+    background: #fff;
+    border-radius: .3rem;
+}
+
+@media (max-width: 660px) {
+    .account-nav .account-shell,
+    .account-footer .account-shell {
+        justify-content: center;
+        flex-wrap: wrap;
+        padding-block: .5rem;
+    }
+
+    .account-nav-links {
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: .6rem 1rem;
+    }
+
+    .account-footer-brand {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: .75rem;
+        text-align: center;
+    }
+
+    .account-footer-brand p {
+        margin: 0;
+        padding: 0;
+        border: 0;
+    }
+
+    .account-form {
+        grid-template-columns: 1fr;
+    }
+}

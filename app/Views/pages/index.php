@@ -1,4 +1,4 @@
-<section class="bg-light py-5 eda-about-section">
+<section id="sobre-eda" class="bg-light py-5 eda-about-section">
     <div class="container px-4 px-md-5 eda-about-content">
         <div class="row justify-content-center mb-5">
             <div class="col-lg-10 col-xl-9 text-center">

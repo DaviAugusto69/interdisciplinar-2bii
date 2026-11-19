@@ -19,7 +19,24 @@ class PagesController
     {
 	
         $this->render('pages/contact', [
-            'title' => 'Contato',
+            'title' => 'Crie sua conta | EDA',
+            'accountPage' => 'contact',
+        ]);
+    }
+
+    public function login(): void
+    {
+        $this->render('pages/login', [
+            'title' => 'Entrar | EDA',
+            'accountPage' => 'login',
+        ]);
+    }
+
+    public function recoverPassword(): void
+    {
+        $this->render('pages/recover-password', [
+            'title' => 'Recuperar senha | EDA',
+            'accountPage' => 'recoverPassword',
         ]);
     }
 

@@ -13,32 +13,21 @@
     <link rel="icon" type="image/x-icon" href="<?= e(asset('assets/favicon.ico')) ?>">
 </head>
 
-<body>
+<body<?= !empty($accountPage) ? ' class="account-layout"' : '' ?>>
 
-    <!-- Menu principal -->
-   
-        <!-- Navegação Bootstrap -->
-
-         <nav class="navbar navbar-expand-lg navbar-light bg-white py-3">
-                <div class="container px-5">
-                    <a class="navbar-brand" href="<?= e(url('pages/index')) ?>">
-                        <?php if (is_file(__DIR__ . '/../../../public/assets/logo-eda.png')): ?>
-                            <img class="site-logo" src="<?= e(asset('assets/logo-eda.png')) ?>" alt="EDA Educação Digital">
-                        <?php else: ?>
-                            <span class="fw-bolder text-primary">Start Bootstrap</span>
-                        <?php endif; ?>
-                    </a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul class="navbar-nav ms-auto mb-2 mb-lg-0 small fw-bolder">
-                            <li class="nav-item"><a class="nav-link" href="<?= e(url('pages/index')) ?>">Inicio</a></li>
-                            <li class="nav-item"><a class="nav-link" href="<?= e(url('pages/resume')) ?>">Resume</a></li>
-                            <li class="nav-item"><a class="nav-link" href="<?= e(url('pages/projects')) ?>">Projects</a></li>
-                            <li class="nav-item"><a class="nav-link" href="<?= e(url('pages/contact')) ?>">Cadastro</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </nav>
+    <nav class="account-nav" aria-label="Menu principal">
+        <div class="account-shell">
+            <a href="<?= e(url('pages/index')) ?>">
+                <img class="site-logo" src="<?= e(asset('assets/logo-eda.png')) ?>" alt="EDA Educação Digital">
+            </a>
+            <div class="account-nav-links">
+                <a href="<?= e(url('pages/index')) ?>">Início</a>
+                <a href="<?= e(url('pages/index')) ?>#sobre-eda">Sobre o EDA</a>
+                <a href="<?= e(url('pages/resume')) ?>">Aprender</a>
+                <a class="account-primary" href="<?= e(url('pages/login')) ?>">Entrar</a>
+            </div>
+        </div>
+    </nav>
 
              <!-- Header-->
             <?php if ($showHero ?? false): ?>
@@ -61,9 +50,8 @@
                             <!-- Header profile picture-->
                             <div class="d-flex justify-content-center mt-5 mt-xxl-0">
                                 <div class="profile bg-gradient-primary-to-secondary">
-                                    <!-- TIP: For best results, use a photo with a transparent background like the demo example below-->
                                     <!-- Watch a tutorial on how to do this on YouTube (link)-->
-                                    <img class="profile-img" src="<?= e(asset('assets/profile.png')) ?>" alt="..." />
+                                    <img class="profile-img" src="<?= e(str_replace(' ', '%20', asset('assets/EDA PAGINA INICIAL.png'))) ?>" alt="" />
                                     <div class="dots-1">
                                         <!-- SVG Dots-->
                                         <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 191.6 1215.4" style="enable-background: new 0 0 191.6 1215.4" xml:space="preserve">
@@ -195,7 +183,37 @@
     
         <!-- Rodapé Bootstrap -->
 
- <footer class="bg-white py-4 mt-auto">
+    <?php if (!empty($accountPage)): ?>
+        <footer class="account-footer">
+            <div class="account-shell">
+                <div class="account-footer-brand">
+                    <img src="<?= e(asset('assets/logo-eda.png')) ?>" alt="EDA Educação Digital">
+                    <p>Tecnologia, aprendizado e autonomia<br> para todas as idades.</p>
+                </div>
+                <div class="account-access" role="group" aria-label="Acessibilidade">
+                    <button type="button" data-font-step="-0.1" aria-label="Diminuir texto">A−</button>
+                    <button type="button" data-font-step="0.1" aria-label="Aumentar texto">A+</button>
+                    <button type="button" id="account-contrast" aria-label="Alto contraste" aria-pressed="false"><i class="bi bi-universal-access-circle" aria-hidden="true"></i></button>
+                </div>
+            </div>
+        </footer>
+        <script>
+            let accountFontScale = 1;
+            document.querySelectorAll('[data-font-step]').forEach((button) => {
+                button.addEventListener('click', () => {
+                    accountFontScale = Math.min(1.4, Math.max(0.9, accountFontScale + Number(button.dataset.fontStep)));
+                    document.documentElement.style.fontSize = (accountFontScale * 100) + '%';
+                });
+            });
+
+            const contrastButton = document.getElementById('account-contrast');
+            contrastButton.addEventListener('click', () => {
+                const enabled = document.body.classList.toggle('account-contrast');
+                contrastButton.setAttribute('aria-pressed', String(enabled));
+            });
+        </script>
+    <?php else: ?>
+        <footer class="bg-white py-4 mt-auto">
             <div class="container px-5">
                 <div class="row align-items-center justify-content-between flex-column flex-sm-row">
                     <div class="col-auto"><div class="small m-0">Copyright &copy; Your Website 2026</div></div>
@@ -210,6 +228,7 @@
                 </div>
             </div>
         </footer>
+    <?php endif; ?>
 
     
 
