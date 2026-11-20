@@ -12,6 +12,39 @@ class User
             ->fetchAll();
     }
 
+    public static function allAdmin(string $search = ''): array
+    {
+        $pdo = Database::connect();
+
+        $sql = 'SELECT u.id, u.name, u.email,
+                       (SELECT COUNT(*) FROM user_progress up WHERE up.user_id = u.id) AS completed_count
+                FROM users u';
+
+        if ($search !== '') {
+            $sql .= ' WHERE u.name LIKE ? OR u.email LIKE ?';
+        }
+
+        $sql .= ' ORDER BY u.id DESC';
+
+        $stmt = $pdo->prepare($sql);
+
+        if ($search !== '') {
+            $term = '%' . $search . '%';
+            $stmt->execute([$term, $term]);
+        } else {
+            $stmt->execute();
+        }
+
+        return $stmt->fetchAll();
+    }
+
+    public static function delete(int $id): void
+    {
+        $pdo = Database::connect();
+        $pdo->prepare('DELETE FROM user_progress WHERE user_id = ?')->execute([$id]);
+        $pdo->prepare('DELETE FROM users WHERE id = ?')->execute([$id]);
+    }
+
     public static function find(int $id): ?array
     {
         $stmt = Database::connect()->prepare(

@@ -1,20 +1,24 @@
-
-
 <?php
 /** @var string $adminName */
 /** @var int $totalUsers */
 /** @var int $totalContents */
+/** @var int $completedActivities */
+/** @var int $totalAccesses */
 ?>
 
 <div class="container py-5">
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
         <div>
-            <h2 class="fw-bold">Painel Administrativo</h2>
-            <p class="text-muted">
+            <h2 class="fw-bold mb-1">Painel Administrativo</h2>
+            <p class="text-muted mb-0">
                 Bem-vindo(a), <?= e($adminName) ?>!
             </p>
         </div>
+
+        <a href="<?= e(url('admin/logout')) ?>" class="btn btn-outline-danger">
+            Sair do painel
+        </a>
     </div>
 
     <hr>
@@ -28,7 +32,7 @@
                 <div class="card-body">
                     <h6 class="text-muted">Usuários</h6>
                     <h3 class="fw-bold">
-                    <?= (int) $totalUsers ?>
+                        <?= (int) $totalUsers ?>
                     </h3>
                     <p class="mb-0 text-muted">Cadastrados</p>
                 </div>
@@ -40,7 +44,7 @@
                 <div class="card-body">
                     <h6 class="text-muted">Conteúdos</h6>
                     <h3 class="fw-bold">
-                      <?= (int) $totalContents ?>
+                        <?= (int) $totalContents ?>
                     </h3>
                     <p class="mb-0 text-muted">Disponíveis</p>
                 </div>
@@ -51,7 +55,9 @@
             <div class="card shadow-sm border-0 rounded-4">
                 <div class="card-body">
                     <h6 class="text-muted">Atividades</h6>
-                    <h3 class="fw-bold">--</h3>
+                    <h3 class="fw-bold">
+                        <?= (int) $completedActivities ?>
+                    </h3>
                     <p class="mb-0 text-muted">Concluídas</p>
                 </div>
             </div>
@@ -61,7 +67,9 @@
             <div class="card shadow-sm border-0 rounded-4">
                 <div class="card-body">
                     <h6 class="text-muted">Acessos</h6>
-                    <h3 class="fw-bold">--</h3>
+                    <h3 class="fw-bold">
+                        <?= (int) $totalAccesses ?>
+                    </h3>
                     <p class="mb-0 text-muted">À plataforma</p>
                 </div>
             </div>
@@ -73,31 +81,56 @@
 
     <div class="row g-4">
 
-        <div class="col-md-6">
+        <div class="col-md-4">
             <div class="card shadow-sm border-0 rounded-4 h-100">
-                <div class="card-body p-4">
-                    <h5 class="fw-bold">Gerenciar usuários</h5>
-                    <p class="text-muted">
-                        Consulte e gerencie os usuários cadastrados.
-                    </p>
-                    <a href="<?= e(url('user/index')) ?>"
-                       class="btn btn-primary">
-                        Acessar usuários
-                    </a>
+                <div class="card-body p-4 d-flex flex-column justify-content-between">
+                    <div>
+                        <h5 class="fw-bold">Gerenciar usuários</h5>
+                        <p class="text-muted">
+                            Consulte, pesquise e gerencie os usuários cadastrados.
+                        </p>
+                    </div>
+                    <div>
+                        <a href="<?= e(url('admin/users')) ?>" class="btn btn-primary">
+                            Acessar usuários
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-6">
+        <div class="col-md-4">
             <div class="card shadow-sm border-0 rounded-4 h-100">
-                <div class="card-body p-4">
-                    <h5 class="fw-bold">Gerenciar conteúdos</h5>
-                    <p class="text-muted">
-                        Administre os materiais educacionais do EDA.
-                    </p>
-                    <button class="btn btn-secondary" disabled>
-                        Em desenvolvimento
-                    </button>
+                <div class="card-body p-4 d-flex flex-column justify-content-between">
+                    <div>
+                        <h5 class="fw-bold">Gerenciar conteúdos</h5>
+                        <p class="text-muted">
+                            Administre os materiais educacionais do EDA.
+                        </p>
+                    </div>
+                    <div>
+                        <a href="<?= e(url('admin/contents')) ?>" class="btn btn-primary">
+                            Acessar conteúdos
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0 rounded-4 h-100">
+                <div class="card-body p-4 d-flex flex-column justify-content-between">
+                    <div>
+                        <h5 class="fw-bold">Relatórios</h5>
+                        <p class="text-muted">
+                            Acompanhe os indicadores de uso e engajamento da plataforma.
+                        </p>
+                    </div>
+                    <div>
+                        <a href="<?= e(url('admin/reports')) ?>" class="btn btn-primary">
+                            Ver relatórios
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
