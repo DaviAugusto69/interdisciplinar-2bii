@@ -1,10 +1,10 @@
 <?php
 return [
-    'host'    => 'localhost',
+    'host'    => '127.0.0.1',
     'port'    => 3306,
     'name'    => 'eda_database',
-    'user'    => 'eda_database_app',
-    'pass'    => 'substitua-por-uma-senha-local',
+    'user'    => '', // Usuário do MySQL deste computador.
+    'pass'    => '', // Senha desse usuário, se houver.
     'charset' => 'utf8mb4',
     'ssl_ca'  => '',
 ];

@@ -1,8 +1,9 @@
 <?php
 return [
-    'host'    => 'localhost',
+    'host'    => '127.0.0.1',
+    'port'    => 3306,
     'name'    => 'eda_database',
-    'user'    => 'root',
+    'user'    => '',
     'pass'    => '',
     'charset' => 'utf8mb4',
 ];
