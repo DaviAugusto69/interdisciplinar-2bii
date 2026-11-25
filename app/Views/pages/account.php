@@ -12,7 +12,15 @@
             <?php endforeach; ?>
         </nav>
 
-        <form id="account-form" method="post" class="account-form" data-status-message="<?= e($unavailable) ?>">
+        <?php if (!empty($errors['form'])): ?>
+            <p role="alert"><?= e($errors['form']) ?></p>
+        <?php endif; ?>
+        <form id="account-form" method="post" class="account-form"
+            <?php if (isset($formAction)): ?>action="<?= e($formAction) ?>"
+            <?php else: ?>data-status-message="<?= e($unavailable) ?>"<?php endif; ?>>
+            <?php if (isset($csrf)): ?>
+                <input type="hidden" name="csrf" value="<?= e($csrf) ?>">
+            <?php endif; ?>
             <?php
             foreach ($fields as [$id, $label, $type, $autocomplete, $icon, $placeholder, $wide]):
             ?>
@@ -20,35 +28,30 @@
                     <label for="<?= e($id) ?>"><?= e($label) ?></label>
                     <div class="account-input">
                         <i class="bi bi-<?= e($icon) ?>" aria-hidden="true"></i>
-                        <input id="<?= e($id) ?>" type="<?= e($type) ?>" autocomplete="<?= e($autocomplete) ?>"
-                            placeholder="<?= e($placeholder) ?>"<?= $id === 'cpf' ? ' inputmode="numeric" maxlength="14"' : '' ?> required>
+                        <input id="<?= e($id) ?>" name="<?= e($id) ?>" type="<?= e($type) ?>" autocomplete="<?= e($autocomplete) ?>"
+                            placeholder="<?= e($placeholder) ?>"<?php if (isset($old[$id])): ?> value="<?= e($old[$id]) ?>"<?php endif; ?>
+                            <?php if (isset($errors[$id])): ?>aria-invalid="true" aria-describedby="<?= e($id) ?>-error"<?php endif; ?> required>
                     </div>
+                    <?php if (isset($errors[$id])): ?>
+                        <p id="<?= e($id) ?>-error" role="alert"><?= e($errors[$id]) ?></p>
+                    <?php endif; ?>
                 </div>
             <?php endforeach; ?>
             <button class="account-primary account-submit account-wide" type="submit"><?= e($submitLabel) ?></button>
         </form>
 
         <p class="account-signin"><?= e($footerPrompt) ?> <a href="<?= e(url('pages/' . $footerRoute)) ?>"><?= e($footerLink) ?></a></p>
-        <p id="account-status" role="status"></p>
+        <p id="account-status" role="status"><?php if (!empty($ok)): ?>Conta criada com sucesso. <a href="<?= e(url('pages/profile')) ?>">Ver meu perfil</a><?php endif; ?></p>
     </div>
 </section>
 
+<?php if (!isset($formAction)): ?>
 <script>
     const accountForm = document.getElementById('account-form');
     const accountStatus = document.getElementById('account-status');
-    const password = document.getElementById('senha');
-    const confirmation = document.getElementById('confirmacao');
-
-    confirmation?.addEventListener('input', () => confirmation.setCustomValidity(''));
-    password?.addEventListener('input', () => confirmation?.setCustomValidity(''));
     accountForm.addEventListener('submit', (event) => {
         event.preventDefault();
-        if (confirmation && password.value !== confirmation.value) {
-            confirmation.setCustomValidity('As senhas precisam ser iguais.');
-            confirmation.reportValidity();
-            return;
-        }
-
         accountStatus.textContent = accountForm.dataset.statusMessage;
     });
 </script>
+<?php endif; ?>

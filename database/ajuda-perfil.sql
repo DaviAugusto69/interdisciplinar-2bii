@@ -1,4 +1,4 @@
-USE meu_mvc;
+USE eda_database;
 
 ALTER TABLE users
   ADD COLUMN phone VARCHAR(32) NULL,

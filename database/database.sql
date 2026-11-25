@@ -1,5 +1,5 @@
-CREATE DATABASE meu_mvc CHARACTER SET utf8mb4;
-USE meu_mvc;
+CREATE DATABASE eda_database CHARACTER SET utf8mb4;
+USE eda_database;
 
 CREATE TABLE users (
   id    INT AUTO_INCREMENT PRIMARY KEY,

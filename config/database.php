@@ -1,7 +1,7 @@
 <?php
 return [
     'host'    => 'localhost',
-    'name'    => 'meu_mvc',
+    'name'    => 'eda_database',
     'user'    => 'root',
     'pass'    => '',
     'charset' => 'utf8mb4',
