@@ -14,12 +14,18 @@ Edição e exclusão são atividades de continuação.
 ## 1. Banco
 
 Execute database/database.sql uma vez em um banco novo no phpMyAdmin
-ou no cliente MySQL. O arquivo cria eda_database, a tabela users e três usuários.
+ou no cliente MySQL. O arquivo cria `eda_database`, as tabelas `users` e
+`admins` e três usuários.
 Bruno tem ID 2 e Carla tem ID 3 em um banco novo.
 
 Em seguida, execute `database/ajuda-perfil.sql` para adicionar as colunas de
 perfil e senha necessárias ao cadastro. Se a tabela `users` já tiver as colunas
 `phone` e `password_hash`, essa etapa do cadastro já foi aplicada.
+
+Se `eda_database` já existir, execute `database/admin.sql` para criar a tabela
+`admins` sem apagar os dados existentes. Em uma instalação nova ou existente,
+crie um administrador pelo terminal com `php scripts/create_admin.php`
+depois de configurar o acesso ao banco.
 
 Se quiser a conta dedicada do exemplo, execute database/create_user.sql
 com uma conta administrativa. Troque a senha de exemplo antes de executar.
