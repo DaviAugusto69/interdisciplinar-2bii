@@ -1,4 +1,4 @@
--- Apply once to the existing database exported as meu_mvc.
+-- Apply once to the existing administrative schema in eda_database.
 -- Back up first. MySQL DDL commits each statement independently.
 ALTER TABLE users
     MODIFY birth_date DATE NULL,

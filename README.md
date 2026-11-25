@@ -4,8 +4,8 @@ O EDA usa PHP MVC, PDO e um único banco MySQL ou MariaDB para a área do aluno 
 
 ## Atualizar o banco administrativo existente
 
-1. Confirme que o servidor escolhido contém o banco da exportação administrativa. Na exportação fornecida, o nome é `meu_mvc` e as tabelas-base são `users`, `admins`, `lessons`, `user_progress` e `access_logs`.
-2. Faça um backup e ensaie a atualização numa cópia protegida da estrutura. Se o banco compartilhado já existe, selecione-o diretamente no phpMyAdmin. Se for transferir o banco para outro servidor, importe a exportação original uma única vez no servidor escolhido e selecione o banco importado.
+1. Confirme que o servidor escolhido contém o banco da exportação administrativa. Use `eda_database` como nome do banco do EDA. As tabelas-base da exportação são `users`, `admins`, `lessons`, `user_progress` e `access_logs`.
+2. Faça um backup e ensaie a atualização numa cópia protegida da estrutura. Se o banco compartilhado já existe, selecione-o diretamente no phpMyAdmin. Se for transferir o banco para outro servidor, crie ou selecione `eda_database` no servidor escolhido e importe a exportação original nesse banco uma única vez.
 3. Importe [database/upgrade-eda.sql](database/upgrade-eda.sql) no banco selecionado. Execute uma vez. O script espera a estrutura da exportação fornecida. Para instalações com alterações locais prévias, compare o esquema antes de aplicar para evitar colisões com colunas ou tabelas já criadas. Operações DDL no MySQL têm commits próprios. Se uma etapa falhar, identifique a última etapa concluída antes de retomar.
 4. Confirme que os registros preexistentes continuam presentes. A migração preserva contas, conteúdos e progresso, mantém as aulas anteriores publicadas e permite que novos cadastros omitam a data de nascimento. Um usuário legado sem `password_hash` precisa de habilitação de credencial por um canal de suporte que verifique sua identidade.
 5. Crie um administrador, se necessário, executando `php scripts/create_admin.php` após configurar a conexão. Os administradores existentes continuam na tabela `admins`.
