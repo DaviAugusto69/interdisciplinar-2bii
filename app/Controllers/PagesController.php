@@ -178,7 +178,6 @@ class PagesController
             'nextLesson' => $nextLesson,
             'rewards' => Learning::rewardsForUser($id),
             'recentLessons' => Lesson::recentPublications(),
-            'csrf' => $this->csrfToken(),
         ]);
     }
 
@@ -502,6 +501,9 @@ class PagesController
 
         $content = $renderFile($base . $view . '.php', $data);
         $vars = $data + ['content' => $content];
+        if (isset($_SESSION['user_id'])) {
+            $vars['logoutCsrf'] = $this->csrfToken();
+        }
         echo $renderFile($base . 'layouts/main.php', $vars);
     }
 }

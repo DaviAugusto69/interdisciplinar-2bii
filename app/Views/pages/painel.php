@@ -61,9 +61,5 @@
             <?php endforeach; ?>
         </section>
 
-        <form method="post" action="<?= e(url('pages/logout')) ?>">
-            <input type="hidden" name="csrf" value="<?= e($csrf) ?>">
-            <button class="btn btn-outline-primary" type="submit">Sair da conta</button>
-        </form>
     </div>
 </div>

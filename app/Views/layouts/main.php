@@ -28,8 +28,11 @@
                 <a href="<?= e(url('pages/help')) ?>">Ajuda</a>
                 <a href="<?= e(url('pages/profile')) ?>">Perfil</a>
                 <a class="account-primary" href="<?= e(url('pages/painel')) ?>">Progresso</a>
-                <?php if (isset($_SESSION['admin_id'])): ?>
-                    <a class="account-primary" href="<?= e(url('admin/index')) ?>">Administração</a>
+                <?php if (isset($logoutCsrf)): ?>
+                    <form method="post" action="<?= e(url('pages/logout')) ?>">
+                        <input type="hidden" name="csrf" value="<?= e($logoutCsrf) ?>">
+                        <button class="account-primary" type="submit">Sair da conta</button>
+                    </form>
                 <?php elseif (!isset($_SESSION['user_id'])): ?>
                     <a class="account-primary" href="<?= e(url('pages/login')) ?>">Entrar</a>
                 <?php endif; ?>
@@ -48,8 +51,13 @@
                                 <div class="badge bg-gradient-primary-to-secondary text-white mb-4"><div class="text-uppercase">Educação &middot; Digital &middot; Acessível</div></div>
                                 <div class="fs-3 fw-light text-muted">Aprenda no seu próprio ritmo</div>
                                 <h1 class="display-3 fw-bolder mb-5"><span class="text-gradient d-inline">A tecnologia não tem idade</span></h1>
-                                <div class="d-grid gap-3 d-sm-flex justify-content-sm-center justify-content-xxl-start mb-3">
-                                    <a class="btn btn-primary btn-lg px-3 py-3 me-sm-3 fs-6 fw-bolder text-nowrap" href="<?= e(url('pages/aprendizagem')) ?>">Começar a aprender</a>
+                                <div class="d-grid gap-3 d-sm-flex flex-wrap justify-content-sm-center justify-content-xxl-start mb-3">
+                                    <?php if (isset($_SESSION['user_id'])): ?>
+                                        <a class="btn btn-primary btn-lg px-3 py-3 me-sm-3 fs-6 fw-bolder text-nowrap" href="<?= e(url('pages/aprendizagem')) ?>">Começar a aprender</a>
+                                    <?php else: ?>
+                                        <a class="btn btn-primary btn-lg px-3 py-3 me-sm-3 fs-6 fw-bolder text-nowrap" href="<?= e(url('pages/login')) ?>">Entrar</a>
+                                        <a class="btn btn-outline-primary btn-lg px-3 py-3 fs-6 fw-bolder text-nowrap" href="<?= e(url('pages/contact')) ?>">Cadastrar</a>
+                                    <?php endif; ?>
                                     <a class="btn btn-outline-dark btn-lg px-3 py-3 fs-6 fw-bolder text-nowrap" href="<?= e(url('pages/index')) ?>#sobre-eda">Conheça o projeto</a>
                                 </div>
                             </div>
