@@ -178,6 +178,21 @@ $oDados = $form === 'dados' ? $old : [];
                             <button class="btn btn-outline-primary" type="submit" name="acao" value="restaurar"><i class="bi bi-arrow-counterclockwise me-1" aria-hidden="true"></i>Restaurar padrão</button>
                         </div>
                     </form>
+                    <?php if ($user): ?>
+                        <div class="card shadow border-0 rounded-4 mt-4">
+                            <div class="card-body p-4 p-md-5">
+                                <h2 class="h4 fw-bolder mb-3">Excluir minha conta</h2>
+                                <details>
+                                    <summary class="btn btn-outline-danger">Excluir minha conta</summary>
+                                    <p class="mt-3">Ao confirmar, você sairá do EDA e perderá o acesso à conta. Seu histórico será guardado e somente um administrador poderá restaurar o acesso.</p>
+                                    <form method="post" action="<?= e(url('pages/deleteAccount')) ?>">
+                                        <input type="hidden" name="csrf" value="<?= e($csrf) ?>">
+                                        <button class="btn btn-danger" type="submit" name="confirm_delete" value="1">Confirmar exclusão da minha conta</button>
+                                    </form>
+                                </details>
+                            </div>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>

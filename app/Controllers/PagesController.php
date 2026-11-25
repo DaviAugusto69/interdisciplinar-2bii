@@ -96,6 +96,7 @@ class PagesController
             'csrf' => $this->csrfToken(),
             'errors' => $flash['errors'] ?? [],
             'old' => $flash['old'] ?? [],
+            'accountDeleted' => ($flash['ok'] ?? null) === 'conta-excluida',
         ]);
     }
 
@@ -265,6 +266,21 @@ class PagesController
             'errors' => $flash['errors'] ?? [],
             'old'    => $flash['old'] ?? [],
         ]);
+    }
+
+    public function deleteAccount(): void
+    {
+        $this->requirePost();
+        $id = $this->currentUserId();
+        if ($this->post('confirm_delete') !== '1') {
+            http_response_code(422);
+            exit('Confirme a exclusão no seu perfil.');
+        }
+
+        User::delete($id);
+        session_regenerate_id(true);
+        $_SESSION = ['flash' => ['ok' => 'conta-excluida']];
+        header('Location: ' . url('pages/login') . '#account-status', true, 303);
     }
 
     public function updateProfile(): void

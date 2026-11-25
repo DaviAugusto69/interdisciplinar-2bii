@@ -16,6 +16,7 @@
             </p>
         </div>
 
+        <a class="btn btn-outline-primary" href="<?= e(url('admin/archives')) ?>">Deletados</a>
         <a class="btn btn-outline-primary" href="<?= e(url('admin/learning')) ?>">Categorias, atividades e recompensas</a>
         <form action="<?= e(url('admin/logout')) ?>" method="post">
             <input type="hidden" name="csrf" value="<?= e($csrf) ?>">

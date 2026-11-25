@@ -41,7 +41,13 @@
         </form>
 
         <p class="account-signin"><?= e($footerPrompt) ?> <a href="<?= e(url('pages/' . $footerRoute)) ?>"><?= e($footerLink) ?></a></p>
-        <p id="account-status" role="status"><?php if (!empty($ok)): ?>Conta criada com sucesso. <a href="<?= e(url('pages/profile')) ?>">Ver meu perfil</a><?php endif; ?></p>
+        <p id="account-status" role="status">
+            <?php if (!empty($ok)): ?>
+                Conta criada com sucesso. <a href="<?= e(url('pages/profile')) ?>">Ver meu perfil</a>
+            <?php elseif (!empty($accountDeleted)): ?>
+                Sua conta foi excluída e o acesso foi desativado.
+            <?php endif; ?>
+        </p>
     </div>
 </section>
 

@@ -8,6 +8,7 @@ use App\Models\Lesson;
 use App\Models\Learning;
 use App\Models\Progress;
 use App\Models\User;
+use App\Validators\ProfileValidator;
 
 class AdminController
 {
@@ -274,9 +275,12 @@ class AdminController
 
         $this->checkCsrf();
 
-        Lesson::delete((int) $id);
+        if (!Lesson::delete((int) $id)) {
+            http_response_code(404);
+            exit('Conteúdo não encontrado.');
+        }
 
-        header('Location: ' . url('admin/contents'));
+        header('Location: ' . url('admin/contents'), true, 303);
         exit;
     }
 
@@ -290,12 +294,99 @@ class AdminController
 
         $_SESSION['csrf_admin'] ??= bin2hex(random_bytes(32));
         $search = is_string($_GET['q'] ?? null) ? trim($_GET['q']) : '';
+        $notice = $_SESSION['admin_user_notice'] ?? null;
+        unset($_SESSION['admin_user_notice']);
 
         $this->render('admin/users', [
             'title'  => 'Gerenciar usuários',
             'users'  => User::allAdmin($search),
             'search' => $search,
             'csrf'   => $_SESSION['csrf_admin'],
+            'notice' => $notice,
+        ]);
+    }
+
+    public function userForm(?string $id = null): void
+    {
+        if (!isset($_SESSION['admin_id'])) {
+            header('Location: ' . url('admin/login'), true, 303);
+            return;
+        }
+
+        $method = $_SERVER['REQUEST_METHOD'];
+        if (!in_array($method, ['GET', 'POST'], true)) {
+            http_response_code(405);
+            header('Allow: GET, POST');
+            return;
+        }
+        if ($method === 'POST') {
+            $this->checkCsrf();
+        }
+
+        $userId = $id === null ? null : filter_var($id, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
+        $user = $userId ? User::profile($userId) : null;
+        if ($id !== null && !$user) {
+            http_response_code(404);
+            exit('Usuário não encontrado.');
+        }
+
+        $input = $user ?? [];
+        $errors = [];
+        if ($method === 'POST') {
+            $input = [
+                'name' => $this->post('name'),
+                'email' => $this->post('email'),
+                'cpf' => $this->post('cpf'),
+                'address' => $this->post('address'),
+                'phone' => $this->post('phone'),
+            ];
+            $validator = new ProfileValidator();
+            $errors = $validator->profile($input);
+            $cpf = preg_replace('/[.\-]/', '', $input['cpf']);
+            $cpfChanged = $userId === null || $input['cpf'] !== $user['cpf'];
+            if ($cpfChanged && !preg_match('/^[0-9]{11}$/D', $cpf)) {
+                $errors['cpf'] = 'Informe um CPF com 11 dígitos.';
+            }
+            if (($userId === null && $input['address'] === '') || mb_strlen($input['address']) > 250) {
+                $errors['address'] = 'Informe um endereço de até 250 caracteres.';
+            }
+            if ($userId === null) {
+                $password = is_string($_POST['new_password'] ?? null) ? $_POST['new_password'] : '';
+                $errors += $validator->password([
+                    'new_password' => $password,
+                    'confirm_password' => $_POST['confirm_password'] ?? '',
+                ], false);
+            }
+
+            if (!$errors) {
+                try {
+                    if ($userId === null) {
+                        User::register($input['name'], $input['email'], password_hash($password, PASSWORD_DEFAULT),
+                            $cpf, $input['address'], $input['phone']);
+                    } else {
+                        User::updateProfile($userId, $input['name'], $input['email'], $input['phone'],
+                            $input['address'], $cpfChanged ? $cpf : null);
+                    }
+                    $_SESSION['admin_user_notice'] = $userId === null ? 'Aluno cadastrado.' : 'Dados do aluno atualizados.';
+                    header('Location: ' . url('admin/users'), true, 303);
+                    return;
+                } catch (\PDOException $error) {
+                    if ((int) ($error->errorInfo[1] ?? 0) !== 1062) {
+                        throw $error;
+                    }
+                    $errors['form'] = 'Já existe uma conta com o e-mail ou CPF informado.';
+                }
+            }
+            http_response_code(422);
+        }
+
+        $this->render('admin/user-form', [
+            'title' => $userId === null ? 'Cadastrar aluno' : 'Editar aluno',
+            'action' => url('admin/userForm' . ($userId === null ? '' : '/' . $userId)),
+            'creating' => $userId === null,
+            'input' => $input,
+            'errors' => $errors,
+            'csrf' => $_SESSION['csrf_admin'] ??= bin2hex(random_bytes(32)),
         ]);
     }
 
@@ -314,10 +405,54 @@ class AdminController
 
         $this->checkCsrf();
 
-        User::delete((int) $id);
+        if (!User::delete((int) $id)) {
+            http_response_code(404);
+            exit('Usuário não encontrado.');
+        }
 
-        header('Location: ' . url('admin/users'));
+        header('Location: ' . url('admin/archives#alunos'), true, 303);
         exit;
+    }
+
+    public function archives(): void
+    {
+        if (!isset($_SESSION['admin_id'])) {
+            header('Location: ' . url('admin/login'), true, 303);
+            return;
+        }
+
+        $notice = $_SESSION['admin_archive_notice'] ?? null;
+        unset($_SESSION['admin_archive_notice']);
+
+        $this->render('admin/archives', [
+            'title' => 'Deletados',
+            'users' => User::allAdmin('', true),
+            'csrf' => $_SESSION['csrf_admin'] ??= bin2hex(random_bytes(32)),
+            'notice' => $notice,
+        ]);
+    }
+
+    public function restoreUser(string $id = '0'): void
+    {
+        if (!isset($_SESSION['admin_id'])) {
+            header('Location: ' . url('admin/login'), true, 303);
+            return;
+        }
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            http_response_code(405);
+            header('Allow: POST');
+            return;
+        }
+        $this->checkCsrf();
+
+        $userId = filter_var($id, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
+        if ($userId === false || !User::restore($userId)) {
+            http_response_code(404);
+            exit('Conta deletada não encontrada.');
+        }
+
+        $_SESSION['admin_archive_notice'] = 'Conta restaurada. O aluno pode entrar novamente.';
+        header('Location: ' . url('admin/archives#alunos'), true, 303);
     }
 
     public function reports(): void
