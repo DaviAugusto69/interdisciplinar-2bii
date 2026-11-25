@@ -48,18 +48,8 @@ class PagesController
                 'new_password' => $password,
                 'confirm_password' => $this->post('confirm_password', false),
             ], false);
-        if (!preg_match('/^\d{11}$/D', $cpf) || preg_match('/^(\d)\1{10}$/D', $cpf)) {
-            $errors['cpf'] = 'Informe um CPF válido.';
-        } else {
-            foreach ([9, 10] as $length) {
-                $sum = 0;
-                for ($i = 0; $i < $length; $i++) {
-                    $sum += (int) $cpf[$i] * ($length + 1 - $i);
-                }
-                if (((10 * $sum) % 11) % 10 !== (int) $cpf[$length]) {
-                    $errors['cpf'] = 'Informe um CPF válido.';
-                }
-            }
+        if (!preg_match('/^[0-9]{11}$/D', $cpf)) {
+            $errors['cpf'] = 'Informe um CPF com 11 dígitos.';
         }
         if ($input['address'] === '' || mb_strlen($input['address']) > 250) {
             $errors['address'] = 'Informe um endereço de até 250 caracteres.';
