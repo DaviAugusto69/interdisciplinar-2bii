@@ -197,10 +197,11 @@
             </div>
             <div class="account-footer-meta">
                 <p class="account-copyright">Copyright © EDA 2026</p>
+
                 <nav class="account-footer-links" aria-label="Links institucionais">
-                    <a href="<?= e(url('pages/termos#privacidade')) ?>">Privacidade</a>
-                    <a href="<?= e(url('pages/termos')) ?>">Termos</a>
-                    <a href="<?= e(url('pages/contact')) ?>">Contato</a>
+                <a href="<?= e(url('pages/termos#privacidade')) ?>">Privacidade</a>
+                <a href="<?= e(url('pages/termos')) ?>">Termos</a>
+                <a href="<?= e(url('pages/help')) ?>#suporte">Contato</a>
                 </nav>
             </div>
             <div class="account-access" role="group" aria-label="Acessibilidade">
