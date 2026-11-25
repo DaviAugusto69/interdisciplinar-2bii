@@ -116,10 +116,13 @@ class Lesson
         ]);
     }
 
-    public static function delete(int $id): void
+    public static function delete(int $id): bool
     {
         $pdo = Database::connect();
-        $stmt = $pdo->prepare('UPDATE lessons SET archived_at = CURRENT_TIMESTAMP, is_published = 0 WHERE id = :id');
+        $stmt = $pdo->prepare(
+            'UPDATE lessons SET archived_at = CURRENT_TIMESTAMP, is_published = 0 WHERE id = :id AND archived_at IS NULL'
+        );
         $stmt->execute([':id' => $id]);
+        return $stmt->rowCount() === 1;
     }
 }

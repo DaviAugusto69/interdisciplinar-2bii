@@ -13,16 +13,17 @@ class User
             ->fetchAll();
     }
 
-    public static function allAdmin(string $search = ''): array
+    public static function allAdmin(string $search = '', bool $archived = false): array
     {
         $pdo = Database::connect();
 
-        $sql = "SELECT u.id, CONCAT_WS(' ', u.name, NULLIF(u.last_name, '')) AS name, u.email,
+        $archiveCondition = $archived ? 'IS NOT NULL' : 'IS NULL';
+        $sql = "SELECT u.id, CONCAT_WS(' ', u.name, NULLIF(u.last_name, '')) AS name, u.email, u.archived_at,
                        (SELECT COUNT(*) FROM user_progress up WHERE up.user_id = u.id) AS completed_count,
                        (SELECT COUNT(*) FROM activity_results ar WHERE ar.user_id = u.id AND ar.completed_at IS NOT NULL) AS activities_completed,
                        (SELECT COALESCE(SUM(ar.points_awarded), 0) FROM activity_results ar WHERE ar.user_id = u.id) AS points,
                        (SELECT COUNT(*) FROM access_logs al WHERE al.user_id = u.id) AS access_count
-                FROM users u WHERE u.archived_at IS NULL";
+                FROM users u WHERE u.archived_at $archiveCondition";
 
         if ($search !== '') {
             $sql .= " AND (CONCAT_WS(' ', u.name, NULLIF(u.last_name, '')) LIKE ? OR u.email LIKE ?)";
@@ -42,10 +43,19 @@ class User
         return $stmt->fetchAll();
     }
 
-    public static function delete(int $id): void
+    public static function delete(int $id): bool
     {
         $pdo = Database::connect();
-        $pdo->prepare('UPDATE users SET archived_at = CURRENT_TIMESTAMP WHERE id = ? AND archived_at IS NULL')->execute([$id]);
+        $stmt = $pdo->prepare('UPDATE users SET archived_at = CURRENT_TIMESTAMP WHERE id = ? AND archived_at IS NULL');
+        $stmt->execute([$id]);
+        return $stmt->rowCount() === 1;
+    }
+
+    public static function restore(int $id): bool
+    {
+        $stmt = Database::connect()->prepare('UPDATE users SET archived_at = NULL WHERE id = ? AND archived_at IS NOT NULL');
+        $stmt->execute([$id]);
+        return $stmt->rowCount() === 1;
     }
 
     public static function find(int $id): ?array
@@ -78,14 +88,14 @@ class User
         return (int) $pdo->lastInsertId();
     }
 
-    public static function register(string $name, string $email, string $passwordHash, string $cpf, string $address): int
+    public static function register(string $name, string $email, string $passwordHash, string $cpf, string $address, string $phone = ''): int
     {
         $pdo = Database::connect();
         $parts = preg_split('/\s+/', $name, 2);
         $stmt = $pdo->prepare(
-            'INSERT INTO users (name, last_name, email, cpf, address, password_hash) VALUES (?, ?, ?, ?, ?, ?)'
+            'INSERT INTO users (name, last_name, email, cpf, address, password_hash, phone) VALUES (?, ?, ?, ?, ?, ?, ?)'
         );
-        $stmt->execute([$parts[0], $parts[1] ?? '', $email, $cpf, $address, $passwordHash]);
+        $stmt->execute([$parts[0], $parts[1] ?? '', $email, $cpf, $address, $passwordHash, $phone === '' ? null : $phone]);
         return (int) $pdo->lastInsertId();
     }
 
@@ -100,7 +110,7 @@ class User
     public static function profile(int $id): ?array
     {
         $stmt = Database::connect()->prepare(
-            "SELECT id, CONCAT_WS(' ', name, NULLIF(last_name, '')) AS name, email, phone, address,
+            "SELECT id, CONCAT_WS(' ', name, NULLIF(last_name, '')) AS name, email, cpf, phone, address,
                     (password_hash IS NOT NULL) AS has_password
              FROM users WHERE id = ? AND archived_at IS NULL"
         );
@@ -122,13 +132,14 @@ class User
         return (bool) $stmt->fetchColumn();
     }
 
-    public static function updateProfile(int $id, string $name, string $email, string $phone, string $address): void
+    public static function updateProfile(int $id, string $name, string $email, string $phone, string $address, ?string $cpf = null): void
     {
         $stmt = Database::connect()->prepare(
-            'UPDATE users SET name = ?, last_name = ?, email = ?, phone = ?, address = ? WHERE id = ? AND archived_at IS NULL'
+            'UPDATE users SET name = ?, last_name = ?, email = ?, phone = ?, address = ?, cpf = COALESCE(?, cpf)
+             WHERE id = ? AND archived_at IS NULL'
         );
         $parts = preg_split('/\s+/', $name, 2);
-        $stmt->execute([$parts[0], $parts[1] ?? '', $email, $phone === '' ? null : $phone, $address, $id]);
+        $stmt->execute([$parts[0], $parts[1] ?? '', $email, $phone === '' ? null : $phone, $address, $cpf, $id]);
     }
 
     public static function credentials(string $email): ?array

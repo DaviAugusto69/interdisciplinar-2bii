@@ -18,12 +18,14 @@ $typeLabels = [
                 <i class="bi bi-arrow-left"></i> Voltar ao painel
             </a>
             <h2 class="fw-bold mb-1">Gerenciar conteúdos</h2>
-            <p class="text-muted mb-0">Cadastre, edite ou remova os materiais educacionais do EDA.</p>
+            <p class="text-muted mb-0">Cadastre, edite ou delete materiais da área dos alunos.</p>
         </div>
 
-        <a href="<?= e(url('admin/createContent')) ?>" class="btn btn-primary">
-            <i class="bi bi-plus-lg"></i> Novo conteúdo
-        </a>
+        <div class="d-flex flex-wrap gap-2">
+            <a href="<?= e(url('admin/createContent')) ?>" class="btn btn-primary">
+                <i class="bi bi-plus-lg"></i> Novo conteúdo
+            </a>
+        </div>
     </div>
 
     <div class="card shadow-sm border-0 rounded-4">
@@ -69,10 +71,10 @@ $typeLabels = [
                                             <form method="post"
                                                   action="<?= e(url('admin/deleteContent/' . (int) $item['id'])) ?>"
                                                   data-title="<?= e($item['title']) ?>"
-                                                  onsubmit="return confirm('Tem certeza que deseja arquivar o conteúdo: ' + this.dataset.title + '?');">
+                                                  onsubmit="return confirm('Deseja deletar o conteúdo ' + this.dataset.title + '? Ele sairá da área dos alunos, e o histórico será preservado.');">
                                                 <input type="hidden" name="csrf" value="<?= e($csrf) ?>">
                                                 <button type="submit" class="btn btn-sm btn-outline-danger">
-                                                    Arquivar
+                                                    Deletar
                                                 </button>
                                             </form>
                                         </div>
