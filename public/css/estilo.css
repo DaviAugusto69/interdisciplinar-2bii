@@ -1347,3 +1347,52 @@ html[data-tema="contraste"] .accordion {
 html[data-tema="contraste"] .alert-success { --bs-alert-color: #fff; --bs-alert-bg: #000; --bs-alert-border-color: #ffeb3b; border-width: 2px; }
 html[data-tema="contraste"] .alert-danger { --bs-alert-color: #fff; --bs-alert-bg: #000; --bs-alert-border-color: #ff8a8a; border-width: 2px; }
 html[data-tema="contraste"] .progress { --bs-progress-bg: #333; --bs-progress-bar-bg: #ffeb3b; --bs-progress-bar-color: #000; border: 1px solid #fff; }
+
+.account-nav {
+  position: relative;
+}
+
+.account-nav a.admin-icon-link {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  font-size: 1.35rem;
+  color: #0f4c75;
+  opacity: 0.65;
+  transition: opacity 0.2s ease, background-color 0.2s ease;
+}
+
+.account-nav a.admin-icon-link:hover {
+  opacity: 1;
+  background-color: rgba(15, 76, 117, 0.12);
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* mantém o card de login centralizado verticalmente */
+}
+
+.account-footer {
+  flex-shrink: 0;
+  margin-top: auto;
+}
