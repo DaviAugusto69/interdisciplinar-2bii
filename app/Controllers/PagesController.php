@@ -196,6 +196,14 @@ class PagesController
         ]);
     }
 
+    public function material(): void
+    {
+        $this->currentUserId();
+        $this->render('pages/material', [
+            'title' => 'Material da Aula',
+        ]);
+    }
+
     public function completeLesson(): void
     {
         $this->requirePost();
