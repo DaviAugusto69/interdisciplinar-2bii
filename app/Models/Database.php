@@ -1,6 +1,7 @@
 <?php
 namespace App\Models;
 use PDO;
+use PDOException;
 class Database
 {
     private static ?PDO $pdo = null;
@@ -17,6 +18,10 @@ class Database
             if ($value !== false) {
                 $db[$key] = $value;
             }
+        }
+        if ($db['user'] === '') {
+            error_log('EDA: configure DB_USER ou o usuário em config/database.local.php no servidor PHP.');
+            throw new PDOException('Usuário do banco não configurado.');
         }
         $port = (int) ($db['port'] ?? 3306);
         $dsn = "mysql:host={$db['host']};port={$port};"
