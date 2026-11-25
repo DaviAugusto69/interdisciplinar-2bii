@@ -1348,13 +1348,13 @@ html[data-tema="contraste"] .alert-success { --bs-alert-color: #fff; --bs-alert-
 html[data-tema="contraste"] .alert-danger { --bs-alert-color: #fff; --bs-alert-bg: #000; --bs-alert-border-color: #ff8a8a; border-width: 2px; }
 html[data-tema="contraste"] .progress { --bs-progress-bg: #333; --bs-progress-bar-bg: #ffeb3b; --bs-progress-bar-color: #000; border: 1px solid #fff; }
 
-.account-nav {
+.account-footer {
   position: relative;
 }
 
-.account-nav a.admin-icon-link {
+.account-footer a.admin-icon-link {
   position: absolute;
-  right: 20px;
+  right: 24px;
   top: 50%;
   transform: translateY(-50%);
   display: inline-flex;
@@ -1364,14 +1364,15 @@ html[data-tema="contraste"] .progress { --bs-progress-bg: #333; --bs-progress-ba
   height: 38px;
   border-radius: 50%;
   font-size: 1.35rem;
-  color: #0f4c75;
-  opacity: 0.65;
+  color: #ffffff;
+  opacity: 0.75;
+  text-decoration: none;
   transition: opacity 0.2s ease, background-color 0.2s ease;
 }
 
-.account-nav a.admin-icon-link:hover {
+.account-footer a.admin-icon-link:hover {
   opacity: 1;
-  background-color: rgba(15, 76, 117, 0.12);
+  background-color: rgba(255, 255, 255, 0.15);
 }
 
 html,
