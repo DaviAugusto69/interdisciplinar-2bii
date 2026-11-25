@@ -32,6 +32,10 @@ function prefs_validas(): array
 // prefs(): tamanho da letra e tema escolhidos (cookies), sempre com valor válido
 function prefs(): array
 {
+    if (isset($_SESSION['eda_preferences'])) {
+        return $_SESSION['eda_preferences'];
+    }
+
     $validas = prefs_validas();
     $fonte = $_COOKIE['eda_fonte'] ?? '';
     $tema  = $_COOKIE['eda_tema'] ?? '';

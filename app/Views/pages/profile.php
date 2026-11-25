@@ -61,6 +61,11 @@ $oDados = $form === 'dados' ? $old : [];
                                     <label for="phone">Telefone com DDD (opcional)</label>
                                     <?= feedback($eDados, 'phone') ?>
                                 </div>
+                                <div class="form-floating mb-3">
+                                    <input class="form-control<?= is_invalid($eDados, 'address') ?>" id="address" name="address" type="text" maxlength="250" autocomplete="street-address" placeholder="Endereço" value="<?= e($oDados['address'] ?? $user['address']) ?>">
+                                    <label for="address">Endereço</label>
+                                    <?= feedback($eDados, 'address') ?>
+                                </div>
                                 <!-- Success message-->
                                 <?php if ($ok === 'dados'): ?>
                                     <div class="alert alert-success" role="status">Dados salvos com sucesso!</div>

@@ -8,5 +8,6 @@ if ($file !== false && str_starts_with($file, __DIR__ . DIRECTORY_SEPARATOR)
     return false;                       // serve CSS, JS, imagens etc.
 }
 
+$_GET['url'] = trim((string) $path, '/');
 $_SERVER['SCRIPT_NAME'] = '/index.php'; // BASE_URL ficará vazio
 require __DIR__ . '/index.php';

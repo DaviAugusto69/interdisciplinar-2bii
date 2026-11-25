@@ -2,7 +2,14 @@
 $lessonUrl = static fn (string $slug): string => url('pages/aprendizagem') . '?aula=' . rawurlencode($slug);
 $lessonNumber = $lessonIndex + 1;
 $lessonCount = count($lessons);
-$lessonTitle = $lessons[$lessonIndex][1];
+$lesson = $lessons[$lessonIndex] ?? null;
+if (!$lesson): ?>
+    <section class="container py-5">
+        <h1>Aprendizagem</h1>
+        <p>Ainda não há aulas publicadas.</p>
+    </section>
+<?php return; endif;
+[$lessonSlug, $lessonTitle, , $description, $type, , $bodyText, $category] = $lesson;
 ?>
 
 <div class="lesson-page">
@@ -14,8 +21,8 @@ $lessonTitle = $lessons[$lessonIndex][1];
         </nav>
 
         <section class="lesson-outline" aria-labelledby="lesson-module-title">
-            <h1 id="lesson-module-title">Aprendendo a usar o celular</h1>
-            <p>Módulo 1 · Aula <?= e($lessonNumber) ?></p>
+            <h1 id="lesson-module-title"><?= e($category ?? 'Aprendizagem') ?></h1>
+            <p>Aula <?= e($lessonNumber) ?></p>
             <div class="lesson-position">
                 <progress value="<?= e($lessonNumber) ?>" max="<?= e($lessonCount) ?>" aria-label="Posição na sequência de aulas"></progress>
                 <span><?= e($lessonNumber) ?> de <?= e($lessonCount) ?> aulas</span>
@@ -31,19 +38,64 @@ $lessonTitle = $lessons[$lessonIndex][1];
 
         <section class="lesson-main" aria-labelledby="lesson-title">
             <h2 id="lesson-title"><?= e($lessonTitle) ?></h2>
-            <div class="lesson-video">
-                <?php if ($videoPath !== null): ?>
-                    <video controls preload="metadata" playsinline aria-labelledby="lesson-title">
-                        <source src="<?= e(asset($videoPath)) ?>" type="video/mp4">
-                        Seu navegador não consegue reproduzir este vídeo.
-                    </video>
-                <?php else: ?>
-                    <div class="lesson-placeholder">
-                        <i class="bi bi-play-circle" aria-hidden="true"></i>
-                        <p>O vídeo desta aula será disponibilizado em breve.</p>
-                    </div>
-                <?php endif; ?>
-            </div>
+            <?php if ($description): ?><p><?= e($description) ?></p><?php endif; ?>
+            <?php if ($mediaUrl && $type === 'video'): ?>
+                <div class="lesson-video"><video controls preload="metadata" playsinline src="<?= e($mediaUrl) ?>" aria-labelledby="lesson-title"></video></div>
+            <?php elseif ($mediaUrl && $type === 'audio'): ?>
+                <audio controls preload="none" src="<?= e($mediaUrl) ?>" aria-labelledby="lesson-title"></audio>
+            <?php elseif ($mediaUrl && $type === 'imagem'): ?>
+                <img class="img-fluid" src="<?= e($mediaUrl) ?>" alt="<?= e($description ?: $lessonTitle) ?>">
+            <?php endif; ?>
+            <?php if ($mediaUrl): ?><p><a href="<?= e($mediaUrl) ?>">Abrir material da aula</a></p><?php endif; ?>
+            <?php if ($bodyText): ?><p><?= nl2br(e($bodyText)) ?></p><?php endif; ?>
+
+            <?php if ($completed): ?>
+                <p role="status">Aula concluída.</p>
+            <?php else: ?>
+                <form method="post" action="<?= e(url('pages/completeLesson')) ?>" class="mb-3">
+                    <input type="hidden" name="csrf" value="<?= e($csrf) ?>">
+                    <input type="hidden" name="lesson" value="<?= e($lessonSlug) ?>">
+                    <button class="btn btn-primary" type="submit">Marcar aula como concluída</button>
+                </form>
+            <?php endif; ?>
+
+            <?php if ($activities): ?>
+                <section id="atividades" aria-labelledby="activities-title">
+                    <h3 id="activities-title">Atividades da aula</h3>
+                    <?php if ($activityMessage): ?><p role="status"><?= e($activityMessage) ?></p><?php endif; ?>
+                    <?php foreach ($activities as $activity): ?>
+                        <article class="mb-3">
+                            <h4><?= e($activity['title']) ?></h4>
+                            <p><?= nl2br(e($activity['prompt'])) ?></p>
+                            <?php if ($activity['completed_at']): ?>
+                                <p>Atividade concluída.</p>
+                            <?php else: ?>
+                                <form method="post" action="<?= e(url('pages/answerActivity')) ?>">
+                                    <input type="hidden" name="csrf" value="<?= e($csrf) ?>">
+                                    <input type="hidden" name="lesson" value="<?= e($lessonSlug) ?>">
+                                    <input type="hidden" name="activity" value="<?= e($activity['id']) ?>">
+                                    <?php if ($activity['choices']): ?>
+                                        <fieldset class="mb-3">
+                                            <legend>Escolha a resposta</legend>
+                                            <?php foreach (explode("\n", $activity['choices']) as $index => $choice): ?>
+                                                <?php $optionId = 'answer-' . $activity['id'] . '-' . $index; ?>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="answer" id="<?= e($optionId) ?>" value="<?= e($choice) ?>" required>
+                                                    <label class="form-check-label" for="<?= e($optionId) ?>"><?= e($choice) ?></label>
+                                                </div>
+                                            <?php endforeach; ?>
+                                        </fieldset>
+                                    <?php elseif ($activity['requires_answer']): ?>
+                                        <label for="answer-<?= e($activity['id']) ?>">Sua resposta</label>
+                                        <input class="form-control mb-2" id="answer-<?= e($activity['id']) ?>" name="answer" required maxlength="150">
+                                    <?php endif; ?>
+                                    <button class="btn btn-secondary" type="submit"><?= $activity['requires_answer'] ? 'Enviar resposta' : 'Concluir atividade' ?></button>
+                                </form>
+                            <?php endif; ?>
+                        </article>
+                    <?php endforeach; ?>
+                </section>
+            <?php endif; ?>
 
             <nav class="lesson-controls" aria-label="Aula anterior e próxima">
                 <?php if (isset($lessons[$lessonIndex - 1])): ?>
@@ -60,7 +112,7 @@ $lessonTitle = $lessons[$lessonIndex][1];
 
             <details class="lesson-help" id="ajuda-aula">
                 <summary><i class="bi bi-chat-dots" aria-hidden="true"></i> Tem alguma dúvida sobre esta aula?</summary>
-                <p>O envio de dúvidas ainda não está disponível pelo site.</p>
+                <p><a href="<?= e(url('pages/help') . '#suporte') ?>">Enviar uma dúvida ao suporte</a></p>
             </details>
         </section>
     </div>

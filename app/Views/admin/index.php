@@ -16,9 +16,11 @@
             </p>
         </div>
 
-        <a href="<?= e(url('admin/logout')) ?>" class="btn btn-outline-danger">
-            Sair do painel
-        </a>
+        <a class="btn btn-outline-primary" href="<?= e(url('admin/learning')) ?>">Categorias, atividades e recompensas</a>
+        <form action="<?= e(url('admin/logout')) ?>" method="post">
+            <input type="hidden" name="csrf" value="<?= e($csrf) ?>">
+            <button class="btn btn-outline-danger" type="submit">Sair do painel</button>
+        </form>
     </div>
 
     <hr>

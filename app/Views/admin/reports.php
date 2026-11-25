@@ -35,7 +35,7 @@
         <div class="col-md-3">
             <div class="card shadow-sm border-0 rounded-4">
                 <div class="card-body">
-                    <small class="text-muted">Conteúdos publicados</small>
+                    <small class="text-muted">Conteúdos ativos</small>
                     <h3 class="fw-bold mb-0"><?= (int) $totalContents ?></h3>
                 </div>
             </div>
@@ -100,14 +100,14 @@
                             <table class="table align-middle mb-0">
                                 <thead class="table-light">
                                     <tr>
-                                        <th>Página / Rota</th>
+                                        <th>Usuário</th>
                                         <th class="text-end">Data e hora</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php foreach ($recentAccesses as $log): ?>
                                         <tr>
-                                            <td class="text-muted"><?= e($log['page'] ?? $log['route'] ?? 'Acesso') ?></td>
+                                            <td class="text-muted"><?= $log['user_id'] ? '#' . e($log['user_id']) : 'Visitante' ?></td>
                                             <td class="text-end text-muted"><?= e($log['accessed_at'] ?? $log['created_at'] ?? '—') ?></td>
                                         </tr>
                                     <?php endforeach; ?>

@@ -10,6 +10,8 @@ $footerRoute = 'login';
 $fields = [
     ['name', 'Nome completo', 'text', 'name', 'person', 'Digite seu nome completo', true],
     ['email', 'E-mail', 'email', 'email', 'envelope', 'exemplo@email.com', false],
+    ['cpf', 'CPF', 'text', 'off', 'card-text', '000.000.000-00', false],
+    ['address', 'Endereço', 'text', 'street-address', 'geo-alt', 'Rua, número, bairro e cidade', true],
     ['new_password', 'Senha', 'password', 'new-password', 'lock', 'Use 8 ou mais caracteres, com letras e números', false],
     ['confirm_password', 'Confirmar senha', 'password', 'new-password', 'lock', 'Repita sua senha', false],
 ];

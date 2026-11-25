@@ -57,15 +57,17 @@
                                         <span class="badge bg-light text-dark border">
                                             <?= (int) $item['completed_count'] ?> aula(s) concluída(s)
                                         </span>
+                                        <div><?= e($item['activities_completed']) ?> atividades · <?= e($item['points']) ?> pontos</div>
+                                        <div><?= e($item['access_count']) ?> acessos</div>
                                     </td>
                                     <td class="text-end pe-4">
                                         <form method="post"
                                               action="<?= e(url('admin/deleteUser/' . (int) $item['id'])) ?>"
                                               data-name="<?= e($item['name']) ?>"
-                                              onsubmit="return confirm('Tem certeza que deseja excluir o usuário: ' + this.dataset.name + '? Todo o progresso dele será removido.');">
+                                              onsubmit="return confirm('Tem certeza que deseja arquivar a conta de ' + this.dataset.name + '? O acesso será desativado e o histórico será mantido.');">
                                             <input type="hidden" name="csrf" value="<?= e($csrf) ?>">
                                             <button type="submit" class="btn btn-sm btn-outline-danger">
-                                                Excluir
+                                                Arquivar
                                             </button>
                                         </form>
                                     </td>

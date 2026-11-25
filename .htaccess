@@ -1,7 +1,7 @@
 Options -Indexes
 RewriteEngine On
 # Impede acesso direto a arquivos internos e ocultos.
-RewriteRule ^(?:app|config)(?:/|$) - [F,L]
+RewriteRule ^(?:app|config|database|scripts)(?:/|$) - [F,L]
 RewriteRule (^|/)\. - [F,L]
 # Não encaminha novamente uma URL já reescrita.
 RewriteRule ^public(?:/|$) - [L]

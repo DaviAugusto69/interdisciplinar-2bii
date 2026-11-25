@@ -49,7 +49,7 @@ $typeLabels = [
                                     <td class="ps-4 fw-semibold">#<?= (int) $item['id'] ?></td>
                                     <td>
                                         <div class="fw-bold"><?= e($item['title']) ?></div>
-                                        <small class="text-muted"><?= e($item['slug']) ?></small>
+                                        <small class="text-muted"><?= $item['is_published'] ? 'Publicado' : 'Rascunho' ?></small>
                                     </td>
                                     <td>
                                         <span class="badge bg-light text-dark border">
@@ -69,10 +69,10 @@ $typeLabels = [
                                             <form method="post"
                                                   action="<?= e(url('admin/deleteContent/' . (int) $item['id'])) ?>"
                                                   data-title="<?= e($item['title']) ?>"
-                                                  onsubmit="return confirm('Tem certeza que deseja excluir o conteúdo: ' + this.dataset.title + '?');">
+                                                  onsubmit="return confirm('Tem certeza que deseja arquivar o conteúdo: ' + this.dataset.title + '?');">
                                                 <input type="hidden" name="csrf" value="<?= e($csrf) ?>">
                                                 <button type="submit" class="btn btn-sm btn-outline-danger">
-                                                    Excluir
+                                                    Arquivar
                                                 </button>
                                             </form>
                                         </div>

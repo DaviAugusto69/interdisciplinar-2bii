@@ -28,7 +28,11 @@
                 <a href="<?= e(url('pages/help')) ?>">Ajuda</a>
                 <a href="<?= e(url('pages/profile')) ?>">Perfil</a>
                 <a class="account-primary" href="<?= e(url('pages/painel')) ?>">Progresso</a>
-                <a class="account-primary" href="<?= e(url('pages/login')) ?>">Entrar</a>
+                <?php if (isset($_SESSION['admin_id'])): ?>
+                    <a class="account-primary" href="<?= e(url('admin/index')) ?>">Administração</a>
+                <?php elseif (!isset($_SESSION['user_id'])): ?>
+                    <a class="account-primary" href="<?= e(url('pages/login')) ?>">Entrar</a>
+                <?php endif; ?>
             </div>
         </div>
     </nav>

@@ -4,8 +4,8 @@ namespace App\Controllers;
 
 use App\Models\AccessLog;
 use App\Models\Admin;
-use App\Models\Database;
 use App\Models\Lesson;
+use App\Models\Learning;
 use App\Models\Progress;
 use App\Models\User;
 
@@ -13,7 +13,6 @@ class AdminController
 {
     public function login(): void
     {
-        session_start();
 
         if (isset($_SESSION['admin_id'])) {
             header('Location: ' . url('admin/index'));
@@ -36,20 +35,14 @@ class AdminController
             exit('Método não permitido');
         }
 
-        session_start();
 
-        if (!hash_equals(
-            $_SESSION['csrf_admin'] ?? '',
-            $_POST['csrf'] ?? ''
-        )) {
-            http_response_code(403);
-            exit('Token inválido');
-        }
+        $this->checkCsrf();
 
-        $email = trim($_POST['email'] ?? '');
-        $password = $_POST['password'] ?? '';
+        $email = $this->post('email');
+        $password = is_string($_POST['password'] ?? null) ? $_POST['password'] : '';
 
-        $admin = Admin::findByEmail($email);
+        $admin = mb_strlen($email) <= 150 && filter_var($email, FILTER_VALIDATE_EMAIL)
+            ? Admin::findByEmail($email) : null;
 
         if (!$admin || !password_verify($password, $admin['password'])) {
             $this->render('admin/login', [
@@ -62,6 +55,7 @@ class AdminController
 
         session_regenerate_id(true);
 
+        $_SESSION = [];
         $_SESSION['admin_id'] = $admin['id'];
         $_SESSION['admin_name'] = $admin['name'];
 
@@ -71,7 +65,6 @@ class AdminController
 
     public function index(): void
     {
-        session_start();
 
         if (!isset($_SESSION['admin_id'])) {
             header('Location: ' . url('admin/login'));
@@ -81,6 +74,7 @@ class AdminController
         $this->render('admin/index', [
             'title' => 'Painel administrativo',
             'adminName' => $_SESSION['admin_name'],
+            'csrf' => $_SESSION['csrf_admin'] ??= bin2hex(random_bytes(32)),
             'totalUsers' => User::count(),
             'totalContents' => Lesson::count(),
             'completedActivities' => Progress::countCompleted(),
@@ -90,7 +84,6 @@ class AdminController
 
     public function contents(): void
     {
-        session_start();
 
         if (!isset($_SESSION['admin_id'])) {
             header('Location: ' . url('admin/login'));
@@ -108,7 +101,6 @@ class AdminController
 
     public function createContent(): void
     {
-        session_start();
 
         if (!isset($_SESSION['admin_id'])) {
             header('Location: ' . url('admin/login'));
@@ -121,6 +113,7 @@ class AdminController
             'title'  => 'Novo conteúdo',
             'action' => url('admin/storeContent'),
             'lesson' => null,
+            'categories' => Learning::catalog('categories'),
             'csrf'   => $_SESSION['csrf_admin'],
             'error'  => '',
         ]);
@@ -133,37 +126,40 @@ class AdminController
             exit('Método não permitido');
         }
 
-        session_start();
 
         if (!isset($_SESSION['admin_id'])) {
             header('Location: ' . url('admin/login'));
             exit;
         }
 
-        if (!hash_equals($_SESSION['csrf_admin'] ?? '', $_POST['csrf'] ?? '')) {
-            http_response_code(403);
-            exit('Token inválido');
-        }
+        $this->checkCsrf();
 
-        $title       = trim($_POST['title'] ?? '');
-        $description = trim($_POST['description'] ?? '');
-        $type        = $_POST['type'] ?? 'video';
-        $icon        = trim($_POST['icon'] ?? 'play-btn');
-        $mediaUrl    = trim($_POST['media_url'] ?? '');
-        $bodyText    = trim($_POST['body_text'] ?? '');
+        $title       = $this->post('title');
+        $description = $this->post('description');
+        $type        = $this->post('type');
+        $icon        = $this->post('icon');
+        $mediaUrl    = $this->post('media_url');
+        $bodyText    = $this->post('body_text');
+        $categoryId  = (int) $this->post('category_id');
+        $categories  = Learning::catalog('categories');
 
-        if ($title === '' || !in_array($type, ['video', 'texto', 'audio', 'imagem'], true)) {
+        if ($title === '' || mb_strlen($title) > 150 || mb_strlen($icon) > 50
+            || strlen($description) > 65535 || strlen($bodyText) > 65535 || mb_strlen($mediaUrl) > 255
+            || ($mediaUrl !== '' && Lesson::mediaUrl($mediaUrl) === null)
+            || ($categoryId !== 0 && !in_array($categoryId, array_map('intval', array_column($categories, 'id')), true))
+            || !in_array($type, ['video', 'texto', 'audio', 'imagem'], true)) {
             $this->render('admin/content-form', [
                 'title'  => 'Novo conteúdo',
                 'action' => url('admin/storeContent'),
-                'lesson' => $_POST,
+                'lesson' => array_filter($_POST, 'is_string'),
                 'csrf'   => $_SESSION['csrf_admin'],
-                'error'  => 'Preencha o título e escolha um tipo válido.',
+                'categories' => $categories,
+                'error'  => 'Revise os campos e use um link HTTP(S) ou um arquivo de mídia em assets.',
             ]);
             return;
         }
 
-        $slug = $this->slugify($title) . '-' . substr((string) time(), -4);
+        $slug = substr($this->slugify($title), 0, 95) . '-' . bin2hex(random_bytes(8));
 
         Lesson::create([
             'slug'        => $slug,
@@ -173,6 +169,8 @@ class AdminController
             'icon'        => $icon !== '' ? $icon : 'play-btn',
             'media_url'   => $mediaUrl !== '' ? $mediaUrl : null,
             'body_text'   => $bodyText !== '' ? $bodyText : null,
+            'is_published' => (int) ($this->post('is_published') === '1'),
+            'category_id' => $categoryId ?: null,
         ]);
 
         header('Location: ' . url('admin/contents'));
@@ -181,7 +179,6 @@ class AdminController
 
     public function editContent(string $id = '0'): void
     {
-        session_start();
 
         if (!isset($_SESSION['admin_id'])) {
             header('Location: ' . url('admin/login'));
@@ -200,6 +197,7 @@ class AdminController
             'title'  => 'Editar conteúdo',
             'action' => url('admin/updateContent/' . (int) $id),
             'lesson' => $lesson,
+            'categories' => Learning::catalog('categories'),
             'csrf'   => $_SESSION['csrf_admin'],
             'error'  => '',
         ]);
@@ -212,33 +210,36 @@ class AdminController
             exit('Método não permitido');
         }
 
-        session_start();
 
         if (!isset($_SESSION['admin_id'])) {
             header('Location: ' . url('admin/login'));
             exit;
         }
 
-        if (!hash_equals($_SESSION['csrf_admin'] ?? '', $_POST['csrf'] ?? '')) {
-            http_response_code(403);
-            exit('Token inválido');
-        }
+        $this->checkCsrf();
 
         $contentId   = (int) $id;
-        $title       = trim($_POST['title'] ?? '');
-        $description = trim($_POST['description'] ?? '');
-        $type        = $_POST['type'] ?? 'video';
-        $icon        = trim($_POST['icon'] ?? 'play-btn');
-        $mediaUrl    = trim($_POST['media_url'] ?? '');
-        $bodyText    = trim($_POST['body_text'] ?? '');
+        $title       = $this->post('title');
+        $description = $this->post('description');
+        $type        = $this->post('type');
+        $icon        = $this->post('icon');
+        $mediaUrl    = $this->post('media_url');
+        $bodyText    = $this->post('body_text');
+        $categoryId  = (int) $this->post('category_id');
+        $categories  = Learning::catalog('categories');
 
-        if ($title === '' || !in_array($type, ['video', 'texto', 'audio', 'imagem'], true)) {
+        if ($title === '' || mb_strlen($title) > 150 || mb_strlen($icon) > 50
+            || strlen($description) > 65535 || strlen($bodyText) > 65535 || mb_strlen($mediaUrl) > 255
+            || ($mediaUrl !== '' && Lesson::mediaUrl($mediaUrl) === null)
+            || ($categoryId !== 0 && !in_array($categoryId, array_map('intval', array_column($categories, 'id')), true))
+            || !in_array($type, ['video', 'texto', 'audio', 'imagem'], true)) {
             $this->render('admin/content-form', [
                 'title'  => 'Editar conteúdo',
                 'action' => url('admin/updateContent/' . $contentId),
-                'lesson' => $_POST + ['id' => $contentId],
+                'lesson' => array_filter($_POST, 'is_string') + ['id' => $contentId],
                 'csrf'   => $_SESSION['csrf_admin'],
-                'error'  => 'Preencha o título e escolha um tipo válido.',
+                'categories' => $categories,
+                'error'  => 'Revise os campos e use um link HTTP(S) ou um arquivo de mídia em assets.',
             ]);
             return;
         }
@@ -250,6 +251,8 @@ class AdminController
             'icon'        => $icon !== '' ? $icon : 'play-btn',
             'media_url'   => $mediaUrl !== '' ? $mediaUrl : null,
             'body_text'   => $bodyText !== '' ? $bodyText : null,
+            'is_published' => (int) ($this->post('is_published') === '1'),
+            'category_id' => $categoryId ?: null,
         ]);
 
         header('Location: ' . url('admin/contents'));
@@ -263,17 +266,13 @@ class AdminController
             exit('Método não permitido');
         }
 
-        session_start();
 
         if (!isset($_SESSION['admin_id'])) {
             header('Location: ' . url('admin/login'));
             exit;
         }
 
-        if (!hash_equals($_SESSION['csrf_admin'] ?? '', $_POST['csrf'] ?? '')) {
-            http_response_code(403);
-            exit('Token inválido');
-        }
+        $this->checkCsrf();
 
         Lesson::delete((int) $id);
 
@@ -283,7 +282,6 @@ class AdminController
 
     public function users(): void
     {
-        session_start();
 
         if (!isset($_SESSION['admin_id'])) {
             header('Location: ' . url('admin/login'));
@@ -291,7 +289,7 @@ class AdminController
         }
 
         $_SESSION['csrf_admin'] ??= bin2hex(random_bytes(32));
-        $search = trim($_GET['q'] ?? '');
+        $search = is_string($_GET['q'] ?? null) ? trim($_GET['q']) : '';
 
         $this->render('admin/users', [
             'title'  => 'Gerenciar usuários',
@@ -308,17 +306,13 @@ class AdminController
             exit('Método não permitido');
         }
 
-        session_start();
 
         if (!isset($_SESSION['admin_id'])) {
             header('Location: ' . url('admin/login'));
             exit;
         }
 
-        if (!hash_equals($_SESSION['csrf_admin'] ?? '', $_POST['csrf'] ?? '')) {
-            http_response_code(403);
-            exit('Token inválido');
-        }
+        $this->checkCsrf();
 
         User::delete((int) $id);
 
@@ -328,27 +322,11 @@ class AdminController
 
     public function reports(): void
     {
-        session_start();
 
         if (!isset($_SESSION['admin_id'])) {
             header('Location: ' . url('admin/login'));
             exit;
         }
-
-        $pdo = Database::connect();
-
-        $topLessons = $pdo->query(
-            'SELECT l.title, COUNT(up.user_id) AS total
-             FROM lessons l
-             LEFT JOIN user_progress up ON up.lesson_slug = l.slug
-             GROUP BY l.id, l.title
-             ORDER BY total DESC, l.id ASC
-             LIMIT 10'
-        )->fetchAll();
-
-        $recentAccesses = $pdo->query(
-            'SELECT * FROM access_logs ORDER BY id DESC LIMIT 10'
-        )->fetchAll();
 
         $this->render('admin/reports', [
             'title'               => 'Relatórios',
@@ -356,19 +334,112 @@ class AdminController
             'totalContents'       => Lesson::count(),
             'completedActivities' => Progress::countCompleted(),
             'totalAccesses'       => AccessLog::countAll(),
-            'topLessons'          => $topLessons,
-            'recentAccesses'      => $recentAccesses,
+            'topLessons'          => Progress::topLessons(),
+            'recentAccesses'      => AccessLog::recent(),
         ]);
     }
 
     public function logout(): void
     {
-        session_start();
 
-        unset($_SESSION['admin_id'], $_SESSION['admin_name'], $_SESSION['csrf_admin']);
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            http_response_code(405);
+            exit;
+        }
+        $this->checkCsrf();
+        $_SESSION = [];
+        session_regenerate_id(true);
 
         header('Location: ' . url('admin/login'));
         exit;
+    }
+
+    public function learning(): void
+    {
+        if (!isset($_SESSION['admin_id'])) {
+            header('Location: ' . url('admin/login'));
+            return;
+        }
+
+        $this->render('admin/learning', [
+            'title' => 'Categorias, atividades e recompensas',
+            'csrf' => $_SESSION['csrf_admin'] ??= bin2hex(random_bytes(32)),
+            'categories' => Learning::catalog('categories'),
+            'activities' => Learning::catalog('activities'),
+            'rewards' => Learning::catalog('rewards'),
+            'lessons' => Lesson::allAdmin(),
+        ]);
+    }
+
+    public function saveLearning(): void
+    {
+        if (!isset($_SESSION['admin_id'])) {
+            header('Location: ' . url('admin/login'));
+            return;
+        }
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            http_response_code(405);
+            return;
+        }
+        $this->checkCsrf();
+
+        $table = $this->post('kind');
+        $id = (int) $this->post('id');
+        $name = $this->post('name');
+        $title = $this->post('title');
+        $prompt = $this->post('prompt');
+        $answer = $this->post('correct_answer');
+        $choices = array_values(array_unique(array_filter(
+            array_map('trim', preg_split('/\R/', $this->post('choices'))),
+            static fn ($choice) => $choice !== ''
+        )));
+        $choicesValid = !$choices || (count($choices) >= 2 && count($choices) <= 6
+            && max(array_map('mb_strlen', $choices)) <= 150 && in_array($answer, $choices, true));
+        $lessonId = (int) $this->post('lesson_id');
+        $description = $this->post('description');
+        $points = filter_var($this->post('points'), FILTER_VALIDATE_INT, ['options' => ['min_range' => 0, 'max_range' => 1000000]]);
+        $active = (int) ($this->post('is_active') === '1');
+
+        $data = match ($table) {
+            'categories' => $name !== '' && mb_strlen($name) <= 100 ? ['name' => $name] : null,
+            'activities' => $title !== '' && mb_strlen($title) <= 150 && $prompt !== '' && strlen($prompt) <= 65535
+                 && mb_strlen($answer) <= 150 && $choicesValid && $points !== false && Lesson::find($lessonId)
+                ? ['lesson_id' => $lessonId, 'title' => $title, 'prompt' => $prompt,
+                   'choices' => $choices ? implode("\n", $choices) : null,
+                   'correct_answer' => $answer === '' ? null : $answer, 'points' => $points, 'is_active' => $active] : null,
+            'rewards' => $name !== '' && mb_strlen($name) <= 100 && $description !== '' && strlen($description) <= 65535
+                 && $points !== false
+                ? ['name' => $name, 'description' => $description, 'required_points' => $points, 'is_active' => $active] : null,
+            default => null,
+        };
+        if ($data === null || $id < 0) {
+            http_response_code(422);
+            exit('Confira os dados do formulário.');
+        }
+        try {
+            Learning::save($table, $id, $data);
+        } catch (\PDOException $error) {
+            if (($error->errorInfo[1] ?? null) !== 1062) {
+                throw $error;
+            }
+            http_response_code(422);
+            exit('Já existe um registro com esse nome.');
+        }
+        header('Location: ' . url('admin/learning'), true, 303);
+    }
+
+    private function checkCsrf(): void
+    {
+        $token = $_SESSION['csrf_admin'] ?? '';
+        if ($token === '' || !hash_equals($token, $this->post('csrf'))) {
+            http_response_code(403);
+            exit('Token inválido');
+        }
+    }
+
+    private function post(string $key): string
+    {
+        return is_string($_POST[$key] ?? null) ? trim($_POST[$key]) : '';
     }
 
     private function slugify(string $text): string

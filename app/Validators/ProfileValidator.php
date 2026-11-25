@@ -54,7 +54,9 @@ class ProfileValidator
             $errors['current_password'] = 'Digite sua senha atual.';
         }
 
-        if (strlen($new) < 8) {
+        if (str_contains($new, "\0")) {
+            $errors['new_password'] = 'Informe uma senha válida.';
+        } elseif (strlen($new) < 8) {
             $errors['new_password'] = 'A nova senha precisa ter pelo menos 8 caracteres.';
         } elseif (strlen($new) > 72) {
             $errors['new_password'] = 'A nova senha deve ter no máximo 72 caracteres.';

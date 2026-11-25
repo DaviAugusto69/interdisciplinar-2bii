@@ -8,7 +8,8 @@ class User
     public static function all(): array
     {
         return Database::connect()
-            ->query('SELECT * FROM users ORDER BY name')
+            ->query("SELECT id, CONCAT_WS(' ', name, NULLIF(last_name, '')) AS name, email
+                     FROM users WHERE archived_at IS NULL ORDER BY name")
             ->fetchAll();
     }
 
@@ -16,12 +17,15 @@ class User
     {
         $pdo = Database::connect();
 
-        $sql = 'SELECT u.id, u.name, u.email,
-                       (SELECT COUNT(*) FROM user_progress up WHERE up.user_id = u.id) AS completed_count
-                FROM users u';
+        $sql = "SELECT u.id, CONCAT_WS(' ', u.name, NULLIF(u.last_name, '')) AS name, u.email,
+                       (SELECT COUNT(*) FROM user_progress up WHERE up.user_id = u.id) AS completed_count,
+                       (SELECT COUNT(*) FROM activity_results ar WHERE ar.user_id = u.id AND ar.completed_at IS NOT NULL) AS activities_completed,
+                       (SELECT COALESCE(SUM(ar.points_awarded), 0) FROM activity_results ar WHERE ar.user_id = u.id) AS points,
+                       (SELECT COUNT(*) FROM access_logs al WHERE al.user_id = u.id) AS access_count
+                FROM users u WHERE u.archived_at IS NULL";
 
         if ($search !== '') {
-            $sql .= ' WHERE u.name LIKE ? OR u.email LIKE ?';
+            $sql .= " AND (CONCAT_WS(' ', u.name, NULLIF(u.last_name, '')) LIKE ? OR u.email LIKE ?)";
         }
 
         $sql .= ' ORDER BY u.id DESC';
@@ -41,14 +45,14 @@ class User
     public static function delete(int $id): void
     {
         $pdo = Database::connect();
-        $pdo->prepare('DELETE FROM user_progress WHERE user_id = ?')->execute([$id]);
-        $pdo->prepare('DELETE FROM users WHERE id = ?')->execute([$id]);
+        $pdo->prepare('UPDATE users SET archived_at = CURRENT_TIMESTAMP WHERE id = ? AND archived_at IS NULL')->execute([$id]);
     }
 
     public static function find(int $id): ?array
     {
         $stmt = Database::connect()->prepare(
-            'SELECT id, name, email FROM users WHERE id = ?'
+            "SELECT id, CONCAT_WS(' ', name, NULLIF(last_name, '')) AS name, email
+             FROM users WHERE id = ? AND archived_at IS NULL"
         );
         $stmt->execute([$id]);
         return $stmt->fetch() ?: null;
@@ -74,10 +78,21 @@ class User
         return (int) $pdo->lastInsertId();
     }
 
+    public static function register(string $name, string $email, string $passwordHash, string $cpf, string $address): int
+    {
+        $pdo = Database::connect();
+        $parts = preg_split('/\s+/', $name, 2);
+        $stmt = $pdo->prepare(
+            'INSERT INTO users (name, last_name, email, cpf, address, password_hash) VALUES (?, ?, ?, ?, ?, ?)'
+        );
+        $stmt->execute([$parts[0], $parts[1] ?? '', $email, $cpf, $address, $passwordHash]);
+        return (int) $pdo->lastInsertId();
+    }
+
     public static function count(): int
     {
         return (int) Database::connect()
-            ->query('SELECT COUNT(*) FROM users')
+            ->query('SELECT COUNT(*) FROM users WHERE archived_at IS NULL')
             ->fetchColumn();
     }
 
@@ -85,8 +100,9 @@ class User
     public static function profile(int $id): ?array
     {
         $stmt = Database::connect()->prepare(
-            'SELECT id, name, email, phone, (password_hash IS NOT NULL) AS has_password
-             FROM users WHERE id = ?'
+            "SELECT id, CONCAT_WS(' ', name, NULLIF(last_name, '')) AS name, email, phone, address,
+                    (password_hash IS NOT NULL) AS has_password
+             FROM users WHERE id = ? AND archived_at IS NULL"
         );
         $stmt->execute([$id]);
         $row = $stmt->fetch();
@@ -106,12 +122,33 @@ class User
         return (bool) $stmt->fetchColumn();
     }
 
-    public static function updateProfile(int $id, string $name, string $email, string $phone): void
+    public static function updateProfile(int $id, string $name, string $email, string $phone, string $address): void
     {
         $stmt = Database::connect()->prepare(
-            'UPDATE users SET name = ?, email = ?, phone = ? WHERE id = ?'
+            'UPDATE users SET name = ?, last_name = ?, email = ?, phone = ?, address = ? WHERE id = ? AND archived_at IS NULL'
         );
-        $stmt->execute([$name, $email, $phone === '' ? null : $phone, $id]);
+        $parts = preg_split('/\s+/', $name, 2);
+        $stmt->execute([$parts[0], $parts[1] ?? '', $email, $phone === '' ? null : $phone, $address, $id]);
+    }
+
+    public static function credentials(string $email): ?array
+    {
+        $stmt = Database::connect()->prepare('SELECT id, password_hash FROM users WHERE email = ? AND archived_at IS NULL');
+        $stmt->execute([$email]);
+        return $stmt->fetch() ?: null;
+    }
+
+    public static function preferences(int $id): ?array
+    {
+        $stmt = Database::connect()->prepare('SELECT font_size AS fonte, color_theme AS tema FROM users WHERE id = ?');
+        $stmt->execute([$id]);
+        return $stmt->fetch() ?: null;
+    }
+
+    public static function savePreferences(int $id, string $font, string $theme): void
+    {
+        $stmt = Database::connect()->prepare('UPDATE users SET font_size = ?, color_theme = ? WHERE id = ?');
+        $stmt->execute([$font, $theme, $id]);
     }
 
     public static function passwordHash(int $id): ?string

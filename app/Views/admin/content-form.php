@@ -88,6 +88,20 @@ $selectedType = $lesson['type'] ?? 'video';
                               placeholder="Escreva aqui o texto explicativo para leitura acessível."><?= e($lesson['body_text'] ?? '') ?></textarea>
                 </div>
 
+                <div class="mb-3">
+                    <label for="category_id" class="form-label">Categoria</label>
+                    <select name="category_id" id="category_id" class="form-select">
+                        <option value="0">Sem categoria</option>
+                        <?php foreach ($categories as $category): ?>
+                            <option value="<?= e($category['id']) ?>" <?= (int) ($lesson['category_id'] ?? 0) === (int) $category['id'] ? 'selected' : '' ?>><?= e($category['name']) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="form-check mb-3">
+                    <input type="hidden" name="is_published" value="0">
+                    <input type="checkbox" class="form-check-input" id="is_published" name="is_published" value="1" <?= !empty($lesson['is_published']) ? 'checked' : '' ?>>
+                    <label class="form-check-label" for="is_published">Publicar na área dos alunos</label>
+                </div>
                 <div class="d-flex gap-2">
                     <button type="submit" class="btn btn-primary px-4">
                         Salvar conteúdo

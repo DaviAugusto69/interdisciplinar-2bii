@@ -10,15 +10,30 @@ class Database
         if (self::$pdo !== null)
             return self::$pdo;
 
-        $db = require __DIR__ . '/../../config/database.php';
-        $dsn = "mysql:host={$db['host']};"
+        $local = __DIR__ . '/../../config/database.local.php';
+        $db = require (is_file($local) ? $local : __DIR__ . '/../../config/database.php');
+        foreach (['host' => 'HOST', 'port' => 'PORT', 'name' => 'NAME', 'user' => 'USER', 'pass' => 'PASSWORD'] as $key => $suffix) {
+            $value = getenv('DB_' . $suffix);
+            if ($value !== false) {
+                $db[$key] = $value;
+            }
+        }
+        $port = (int) ($db['port'] ?? 3306);
+        $dsn = "mysql:host={$db['host']};port={$port};"
             . "dbname={$db['name']};charset={$db['charset']}";
 
-        self::$pdo = new PDO($dsn, $db['user'], $db['pass'], [
+        $options = [
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
             PDO::ATTR_EMULATE_PREPARES => false,
-        ]);
+        ];
+        $ca = getenv('DB_SSL_CA') ?: ($db['ssl_ca'] ?? '');
+        if ($ca !== '') {
+            $options[PDO::MYSQL_ATTR_SSL_CA] = $ca;
+            $options[PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT] = true;
+        }
+
+        self::$pdo = new PDO($dsn, $db['user'], $db['pass'], $options);
         
         return self::$pdo;
     }

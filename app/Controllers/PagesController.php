@@ -4,6 +4,9 @@ namespace App\Controllers;
 use App\Models\SupportMessage;
 use App\Models\User;
 use App\Models\Lesson;
+use App\Models\Progress;
+use App\Models\AccessLog;
+use App\Models\Learning;
 use App\Validators\ProfileValidator;
 use App\Validators\UserValidator;
 
@@ -36,12 +39,31 @@ class PagesController
         $this->requirePost();
 
         $input = ['name' => $this->post('name'), 'email' => $this->post('email')];
+        $input['cpf'] = $this->post('cpf');
+        $input['address'] = $this->post('address');
+        $cpf = preg_replace('/[.\-]/', '', $input['cpf']);
         $password = $this->post('new_password', false);
         $errors = (new UserValidator())->validate($input)
             + (new ProfileValidator())->password([
                 'new_password' => $password,
                 'confirm_password' => $this->post('confirm_password', false),
             ], false);
+        if (!preg_match('/^\d{11}$/D', $cpf) || preg_match('/^(\d)\1{10}$/D', $cpf)) {
+            $errors['cpf'] = 'Informe um CPF válido.';
+        } else {
+            foreach ([9, 10] as $length) {
+                $sum = 0;
+                for ($i = 0; $i < $length; $i++) {
+                    $sum += (int) $cpf[$i] * ($length + 1 - $i);
+                }
+                if (((10 * $sum) % 11) % 10 !== (int) $cpf[$length]) {
+                    $errors['cpf'] = 'Informe um CPF válido.';
+                }
+            }
+        }
+        if ($input['address'] === '' || mb_strlen($input['address']) > 250) {
+            $errors['address'] = 'Informe um endereço de até 250 caracteres.';
+        }
         if (str_contains($password, "\0")) {
             $errors['new_password'] = 'Informe uma senha válida.';
         }
@@ -50,13 +72,12 @@ class PagesController
         }
 
         try {
-            $id = User::create($input['name'], $input['email'], password_hash($password, PASSWORD_DEFAULT));
+            $id = User::register($input['name'], $input['email'], password_hash($password, PASSWORD_DEFAULT), $cpf, $input['address']);
         } catch (\PDOException $exception) {
             $message = 'Não foi possível criar a conta. Tente novamente.';
             $field = 'form';
             if (($exception->errorInfo[1] ?? null) === 1062) {
-                $message = 'Este e-mail já está cadastrado.';
-                $field = 'email';
+                $message = 'Já existe uma conta com o e-mail ou CPF informado.';
             } else {
                 error_log('Cadastro: falha ao salvar usuário (SQLSTATE ' . $exception->getCode() . ').');
             }
@@ -66,16 +87,60 @@ class PagesController
         }
 
         session_regenerate_id(true);
-        $_SESSION['user_id'] = $id;
+        $_SESSION = ['user_id' => $id];
+        AccessLog::record($id);
         $this->redirectBack('pages/contact', 'account-status', ['ok' => 'cadastro']);
     }
 
     public function login(): void
     {
+        if (isset($_SESSION['user_id'])) {
+            $this->currentUserId();
+            header('Location: ' . url('pages/painel'), true, 303);
+            return;
+        }
+        $flash = $this->takeFlash();
         $this->render('pages/login', [
             'title' => 'Entrar',
             'accountPage' => 'login',
+            'csrf' => $this->csrfToken(),
+            'errors' => $flash['errors'] ?? [],
+            'old' => $flash['old'] ?? [],
         ]);
+    }
+
+    public function authenticate(): void
+    {
+        $this->requirePost();
+        $email = $this->post('email');
+        $password = $this->post('senha', false);
+        $user = mb_strlen($email) <= 150 && filter_var($email, FILTER_VALIDATE_EMAIL)
+            ? User::credentials($email) : null;
+        if (!$user || !$user['password_hash'] || strlen($password) > 72
+            || !password_verify($password, $user['password_hash'])) {
+            $this->redirectBack('pages/login', 'account-form', [
+                'errors' => ['form' => 'E-mail ou senha incorretos.'],
+                'old' => ['email' => $email],
+            ]);
+        }
+
+        $id = (int) $user['id'];
+        session_regenerate_id(true);
+        $_SESSION = ['user_id' => $id];
+        $preferences = User::preferences($id);
+        if (isset($preferences['fonte'], $preferences['tema'])) {
+            $_SESSION['eda_preferences'] = $preferences;
+        }
+        AccessLog::record($id);
+        header('Location: ' . url('pages/painel'), true, 303);
+    }
+
+    public function logout(): void
+    {
+        $this->requirePost();
+        $_SESSION = [];
+        session_regenerate_id(true);
+        header('Location: ' . url('pages/login'), true, 303);
     }
 
     public function recoverPassword(): void
@@ -88,40 +153,86 @@ class PagesController
 
     public function painel(): void
     {
+        $id = $this->currentUserId();
+        $lessons = Lesson::all();
+        $completed = Progress::completedLessons($id);
+        $nextLesson = null;
+        $modules = [];
+        foreach ($lessons as $lesson) {
+            $done = in_array($lesson[0], $completed, true);
+            if (!$done && $nextLesson === null) {
+                $nextLesson = $lesson[0];
+            }
+            $category = $lesson[7];
+            if ($category !== null) {
+                $modules[$category] ??= ['total' => 0, 'completed' => 0, 'slug' => $lesson[0]];
+                $modules[$category]['total']++;
+                $modules[$category]['completed'] += (int) $done;
+            }
+        }
         $this->render('pages/painel', [
             'title' => 'Meu painel',
+            'total' => count($lessons),
+            'completed' => count($completed),
+            'modules' => $modules,
+            'nextLesson' => $nextLesson,
+            'rewards' => Learning::rewardsForUser($id),
+            'recentLessons' => Lesson::recentPublications(),
+            'csrf' => $this->csrfToken(),
         ]);
     }
 
     public function aprendizagem(): void
     {
-        try {
-            $lessons = Lesson::all();
-        } catch (\PDOException $exception) {
-            error_log('Aprendizagem: falha ao consultar aulas (SQLSTATE ' . $exception->getCode() . ').');
-            $lessons = [];
-        }
-
-        if ($lessons === []) {
-            $lessons = [
-                ['introducao-ao-celular', 'Introdução ao celular', 'play-btn'],
-                ['conhecendo-a-tela', 'Conhecendo a tela', 'phone'],
-                ['fazendo-uma-ligacao', 'Fazendo uma ligação', 'telephone'],
-                ['salvando-contatos', 'Salvando contatos', 'people'],
-                ['revisao-da-aula', 'Revisão da aula', 'check-circle'],
-            ];
-        }
+        $id = $this->currentUserId();
+        $lessons = Lesson::all();
         $requestedLesson = $_GET['aula'] ?? '';
         $lessonIndex = array_search($requestedLesson, array_column($lessons, 0), true);
         $lessonIndex = $lessonIndex === false ? 0 : $lessonIndex;
-        $videoPath = 'assets/' . $lessons[$lessonIndex][0] . '.mp4';
+        $lesson = $lessons[$lessonIndex] ?? null;
+        $mediaUrl = Lesson::mediaUrl($lesson[5] ?? '');
+        $activities = $lesson ? Learning::activitiesForLesson($lesson[0], $id) : [];
+        $flash = $this->takeFlash();
 
         $this->render('pages/aprendizagem', [
             'title' => 'Aprendizagem',
             'lessons' => $lessons,
             'lessonIndex' => $lessonIndex,
-            'videoPath' => is_file(__DIR__ . '/../../public/' . $videoPath) ? $videoPath : null,
+            'mediaUrl' => $mediaUrl,
+            'activities' => $activities,
+            'activityMessage' => $flash['activityMessage'] ?? null,
+            'completed' => $lesson && in_array($lesson[0], Progress::completedLessons($id), true),
+            'csrf' => $this->csrfToken(),
         ]);
+    }
+
+    public function completeLesson(): void
+    {
+        $this->requirePost();
+        $id = $this->currentUserId();
+        $slug = $this->post('lesson');
+        if ($slug === '' || strlen($slug) > 120) {
+            http_response_code(422);
+            exit('Selecione uma aula.');
+        }
+        Progress::markCompleted($id, $slug);
+        header('Location: ' . url('pages/aprendizagem') . '?aula=' . rawurlencode($slug), true, 303);
+    }
+
+    public function answerActivity(): void
+    {
+        $this->requirePost();
+        $id = $this->currentUserId();
+        $activity = (int) $this->post('activity');
+        $slug = $this->post('lesson');
+        $answer = $this->post('answer');
+        if ($activity <= 0 || strlen($slug) > 120 || mb_strlen($answer) > 150) {
+            http_response_code(422);
+            exit('Confira a resposta enviada.');
+        }
+        $result = Learning::answer($id, $activity, $slug, $answer);
+        $_SESSION['flash'] = ['activityMessage' => $result ? 'Atividade concluída.' : 'Resposta incorreta. Tente novamente.'];
+        header('Location: ' . url('pages/aprendizagem') . '?aula=' . rawurlencode($slug) . '#atividades', true, 303);
     }
 
     public function resume(): void
@@ -150,8 +261,8 @@ class PagesController
     public function profile(): void
     {
         session_status() === PHP_SESSION_NONE && session_start();
-        $id = (int) ($_SESSION['user_id'] ?? 0);
-        $user = $id > 0 ? User::profile($id) : null;
+        $id = $this->currentUserId();
+        $user = User::profile($id);
 
         $flash = $this->takeFlash();
         $this->render('pages/profile', [
@@ -176,9 +287,13 @@ class PagesController
             'name'  => $this->post('name'),
             'email' => $this->post('email'),
             'phone' => $this->post('phone'),
+            'address' => $this->post('address'),
         ];
 
         $errors = (new ProfileValidator())->profile($input);
+        if (mb_strlen($input['address']) > 250) {
+            $errors['address'] = 'O endereço deve ter até 250 caracteres.';
+        }
         if (!$errors && User::emailTakenByOther($input['email'], $id)) {
             $errors['email'] = 'Este e-mail já está cadastrado.';
         }
@@ -188,7 +303,7 @@ class PagesController
             ]);
         }
 
-        User::updateProfile($id, $input['name'], $input['email'], $input['phone']);
+        User::updateProfile($id, $input['name'], $input['email'], $input['phone'], $input['address']);
         $this->redirectBack('pages/profile', 'dados', ['ok' => 'dados']);
     }
 
@@ -229,6 +344,7 @@ class PagesController
     {
         $this->requirePost();
 
+        $id = $this->currentUserId();
         $validas = prefs_validas();
         if ($this->post('acao') === 'restaurar') {
             $fonte = 'normal';
@@ -243,15 +359,8 @@ class PagesController
             }
         }
 
-        $opcoes = [
-            'expires'  => time() + 60 * 60 * 24 * 365,
-            'path'     => BASE_URL === '' ? '/' : BASE_URL,
-            'samesite' => 'Lax',
-            'httponly' => true,
-        ];
-        setcookie('eda_fonte', $fonte, $opcoes);
-        setcookie('eda_tema', $tema, $opcoes);
-
+        User::savePreferences($id, $fonte, $tema);
+        $_SESSION['eda_preferences'] = ['fonte' => $fonte, 'tema' => $tema];
         $this->redirectBack('pages/profile', 'prefs', ['ok' => 'prefs']);
     }
 
@@ -318,9 +427,10 @@ class PagesController
     {
         session_status() === PHP_SESSION_NONE && session_start();
         $id = (int) ($_SESSION['user_id'] ?? 0);
-        if ($id <= 0) {
-            http_response_code(401);
-            exit('Entre para alterar os dados da sua conta.');
+        if ($id <= 0 || !User::find($id)) {
+            unset($_SESSION['user_id'], $_SESSION['eda_preferences']);
+            header('Location: ' . url('pages/login'), true, 303);
+            exit;
         }
         return $id;
     }
