@@ -199,9 +199,9 @@
                 <p class="account-copyright">Copyright © EDA 2026</p>
 
                 <nav class="account-footer-links" aria-label="Links institucionais">
-                <a href="<?= e(url('pages/termos#privacidade')) ?>">Privacidade</a>
-                <a href="<?= e(url('pages/termos')) ?>">Termos</a>
-                <a href="<?= e(url('pages/help')) ?>#suporte">Contato</a>
+                    <a href="<?= e(url('pages/termos#privacidade')) ?>">Privacidade</a>
+                    <a href="<?= e(url('pages/termos')) ?>">Termos</a>
+                    <a href="<?= e(url('pages/help')) ?>#suporte">Contato</a>
                 </nav>
             </div>
             <div class="account-access" role="group" aria-label="Acessibilidade">
@@ -209,8 +209,10 @@
                 <button type="button" data-font-step="0.1" aria-label="Aumentar texto">A+</button>
                 <button type="button" id="account-contrast" aria-label="Alto contraste" aria-pressed="false"><i class="bi bi-universal-access-circle" aria-hidden="true"></i></button>
             </div>
+            <a class="admin-icon-link" href="<?= e(url('admin/index')) ?>" title="Painel administrativo" aria-label="Painel administrativo">
+                <i class="bi bi-person-fill-gear" aria-hidden="true"></i>
+            </a>
         </div>
-
     </footer>
 
     <script>
