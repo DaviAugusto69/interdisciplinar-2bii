@@ -30,6 +30,25 @@ class Progress
         return $stmt->fetchAll(\PDO::FETCH_COLUMN);
     }
 
+    public static function recentForUser(int $userId): array
+    {
+        $stmt = Database::connect()->prepare(
+            "SELECT title, completed_at, kind FROM (
+                SELECT l.title, p.completed_at, 'lesson' AS kind
+                FROM user_progress p JOIN lessons l ON l.slug = p.lesson_slug
+                WHERE p.user_id = ? AND l.archived_at IS NULL AND l.is_published = 1
+                UNION ALL
+                SELECT a.title, r.completed_at, 'activity' AS kind
+                FROM activity_results r JOIN activities a ON a.id = r.activity_id
+                JOIN lessons l ON l.id = a.lesson_id
+                WHERE r.user_id = ? AND r.completed_at IS NOT NULL
+                  AND l.archived_at IS NULL AND l.is_published = 1 AND a.is_active = 1
+             ) AS history ORDER BY completed_at DESC, title LIMIT 5"
+        );
+        $stmt->execute([$userId, $userId]);
+        return $stmt->fetchAll();
+    }
+
     public static function markCompleted(int $userId, string $lessonSlug): void
     {
         $pdo = Database::connect();

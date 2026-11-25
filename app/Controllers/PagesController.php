@@ -253,12 +253,19 @@ class PagesController
         session_status() === PHP_SESSION_NONE && session_start();
         $id = $this->currentUserId();
         $user = User::profile($id);
+        $lessons = Lesson::all();
+        $completed = Progress::completedLessons($id);
+        $pending = array_filter($lessons, static fn (array $lesson): bool => !in_array($lesson[0], $completed, true));
 
         $flash = $this->takeFlash();
         $this->render('pages/profile', [
             'title'  => 'Perfil e configurações',
-            'hero'   => false,
+            'isProfilePage' => true,
             'user'   => $user,
+            'lessonCount' => count($lessons),
+            'completedCount' => count($completed),
+            'pendingLessons' => array_slice($pending, 0, 4),
+            'recentActivities' => Progress::recentForUser($id),
             'prefs'  => prefs(),
             'csrf'   => $this->csrfToken(),
             'ok'     => $flash['ok'] ?? null,
@@ -507,9 +514,6 @@ class PagesController
 
         $content = $renderFile($base . $view . '.php', $data);
         $vars = $data + ['content' => $content];
-        if (isset($_SESSION['user_id'])) {
-            $vars['logoutCsrf'] = $this->csrfToken();
-        }
         echo $renderFile($base . 'layouts/main.php', $vars);
     }
 }

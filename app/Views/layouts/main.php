@@ -3,7 +3,7 @@
 <html lang="pt-BR" data-fonte="<?= e($eda['fonte']) ?>" data-tema="<?= e($eda['tema']) ?>">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">l
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?= e(isset($title) ? 'EDA | ' . $title : 'EDA') ?></title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -26,20 +26,14 @@
                 <a href="<?= e(url('pages/index')) ?>#sobre-eda">Sobre o EDA</a>
                 <a href="<?= e(url('pages/aprendizagem')) ?>">Aprender</a>
                 <a href="<?= e(url('pages/help')) ?>">Ajuda</a>
-                <a href="<?= e(url('pages/profile')) ?>">Perfil</a>
-                <a class="account-primary" href="<?= e(url('pages/painel')) ?>">Progresso</a>
-                <?php if (isset($logoutCsrf)): ?>
-                    <form method="post" action="<?= e(url('pages/logout')) ?>">
-                        <input type="hidden" name="csrf" value="<?= e($logoutCsrf) ?>">
-                        <button class="account-primary" type="submit">Sair da conta</button>
-                    </form>
-                <?php elseif (!isset($_SESSION['user_id'])): ?>
+                <?php if (!isset($_SESSION['user_id'])): ?>
                     <a class="account-primary" href="<?= e(url('pages/login')) ?>">Entrar</a>
                 <?php endif; ?>
-                <a class="admin-icon-link" href="<?= e(url('admin/login')) ?>" title="Área do Administrador" aria-label="Área do Administrador">
-                    <i class="bi bi-person-fill-gear" aria-hidden="true"></i>
-                </a>
             </div>
+            <a class="profile-icon-link" href="<?= e(url('pages/profile')) ?>" title="Meu perfil" aria-label="Meu perfil"<?= !empty($isProfilePage) ? ' aria-current="page"' : '' ?>>
+                <i class="bi bi-person-circle" aria-hidden="true"></i>
+            </a>
+        </div>
     </nav>
 
              <!-- Header-->
