@@ -1634,16 +1634,25 @@ html[data-tema="contraste"] .profile-shell {
   top: 50%;
   transform: translateY(-50%);
   display: inline-flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  font-size: 1.35rem;
+  gap: 3px;
+  padding: 6px 10px;
+  border-radius: 10px;
+  font-size: 1.3rem;
+  line-height: 1;
   color: #ffffff;
-  opacity: 0.75;
+  opacity: 0.85;
   text-decoration: none;
   transition: opacity 0.2s ease, background-color 0.2s ease;
+}
+
+.account-footer a.admin-icon-link span {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
 }
 
 .account-footer a.admin-icon-link:hover {
