@@ -61,13 +61,17 @@ class User
         return (bool) $stmt->fetchColumn();
     }
 
-    public static function create(string $name, string $email): int
+    public static function create(string $name, string $email, ?string $passwordHash = null): int
     {
-        $stmt = Database::connect()->prepare(
-            'INSERT INTO users (name, email) VALUES (?, ?)'
-        );
-        $stmt->execute([$name, $email]);
-        return (int) Database::connect()->lastInsertId();
+        $pdo = Database::connect();
+        if ($passwordHash === null) {
+            $stmt = $pdo->prepare('INSERT INTO users (name, email) VALUES (?, ?)');
+            $stmt->execute([$name, $email]);
+        } else {
+            $stmt = $pdo->prepare('INSERT INTO users (name, email, password_hash) VALUES (?, ?, ?)');
+            $stmt->execute([$name, $email, $passwordHash]);
+        }
+        return (int) $pdo->lastInsertId();
     }
 
     public static function count(): int

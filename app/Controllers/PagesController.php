@@ -20,11 +20,54 @@ class PagesController
 
     public function contact(): void
     {
-	
+        $flash = $this->takeFlash();
         $this->render('pages/contact', [
             'title' => 'Cadastro',
             'accountPage' => 'contact',
+            'csrf' => $this->csrfToken(),
+            'errors' => $flash['errors'] ?? [],
+            'old' => $flash['old'] ?? [],
+            'ok' => ($flash['ok'] ?? null) === 'cadastro',
         ]);
+    }
+
+    public function register(): void
+    {
+        $this->requirePost();
+
+        $input = ['name' => $this->post('name'), 'email' => $this->post('email')];
+        $password = $this->post('new_password', false);
+        $errors = (new UserValidator())->validate($input)
+            + (new ProfileValidator())->password([
+                'new_password' => $password,
+                'confirm_password' => $this->post('confirm_password', false),
+            ], false);
+        if (str_contains($password, "\0")) {
+            $errors['new_password'] = 'Informe uma senha válida.';
+        }
+        if ($errors) {
+            $this->redirectBack('pages/contact', 'account-form', ['errors' => $errors, 'old' => $input]);
+        }
+
+        try {
+            $id = User::create($input['name'], $input['email'], password_hash($password, PASSWORD_DEFAULT));
+        } catch (\PDOException $exception) {
+            $message = 'Não foi possível criar a conta. Tente novamente.';
+            $field = 'form';
+            if (($exception->errorInfo[1] ?? null) === 1062) {
+                $message = 'Este e-mail já está cadastrado.';
+                $field = 'email';
+            } else {
+                error_log('Cadastro: falha ao salvar usuário (SQLSTATE ' . $exception->getCode() . ').');
+            }
+            $this->redirectBack('pages/contact', 'account-form', [
+                'errors' => [$field => $message], 'old' => $input,
+            ]);
+        }
+
+        session_regenerate_id(true);
+        $_SESSION['user_id'] = $id;
+        $this->redirectBack('pages/contact', 'account-status', ['ok' => 'cadastro']);
     }
 
     public function login(): void
@@ -52,7 +95,22 @@ class PagesController
 
     public function aprendizagem(): void
     {
-        $lessons = Lesson::all();
+        try {
+            $lessons = Lesson::all();
+        } catch (\PDOException $exception) {
+            error_log('Aprendizagem: falha ao consultar aulas (SQLSTATE ' . $exception->getCode() . ').');
+            $lessons = [];
+        }
+
+        if ($lessons === []) {
+            $lessons = [
+                ['introducao-ao-celular', 'Introdução ao celular', 'play-btn'],
+                ['conhecendo-a-tela', 'Conhecendo a tela', 'phone'],
+                ['fazendo-uma-ligacao', 'Fazendo uma ligação', 'telephone'],
+                ['salvando-contatos', 'Salvando contatos', 'people'],
+                ['revisao-da-aula', 'Revisão da aula', 'check-circle'],
+            ];
+        }
         $requestedLesson = $_GET['aula'] ?? '';
         $lessonIndex = array_search($requestedLesson, array_column($lessons, 0), true);
         $lessonIndex = $lessonIndex === false ? 0 : $lessonIndex;
@@ -314,7 +372,8 @@ class PagesController
     private function checkCsrf(): void
     {
         session_status() === PHP_SESSION_NONE && session_start();
-        if (!hash_equals($_SESSION['csrf'] ?? '', $_POST['csrf'] ?? '')) {
+        $token = $_SESSION['csrf'] ?? '';
+        if ($token === '' || !hash_equals($token, $this->post('csrf', false))) {
             http_response_code(403);
             exit('Token inválido');
         }
