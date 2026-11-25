@@ -1,3 +1,29 @@
+<section class="py-5 bg-white">
+    <div class="container px-4 px-md-5">
+        <div class="row justify-content-center text-center">
+            <div class="col-lg-8">
+                <h2 class="display-6 fw-bolder mb-3">
+                    <span class="text-gradient d-inline">Veja como fazer seu cadastro</span>
+                </h2>
+                <p class="lead fw-light text-muted mb-4">
+                    Assista ao passo a passo rápido abaixo para criar sua conta e começar a usar a plataforma.
+                </p>
+
+                <div class="ratio ratio-16x9 shadow rounded-4 overflow-hidden border">
+                    <video controls preload="metadata">
+                        <source src="<?= e(asset('assets/tutorial-cadastro.mp4')) ?>" type="video/mp4">
+                        Seu navegador não suporta a reprodução de vídeos.
+                    </video>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="sobre-eda" class="bg-light py-5 eda-about-section">
+    <div class="container px-4 px-md-5 eda-about-content">
+        
+
 <section id="sobre-eda" class="bg-light py-5 eda-about-section">
     <div class="container px-4 px-md-5 eda-about-content">
         <div class="row justify-content-center mb-5">
