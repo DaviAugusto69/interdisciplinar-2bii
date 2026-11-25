@@ -61,7 +61,6 @@ if ($url[0] === 'user') {
 try {
     (new $controller())->$method(...$params);
 } catch (PDOException $error) {
-    error_log('EDA: falha no banco (SQLSTATE ' . $error->getCode() . ').');
     http_response_code(503);
-    exit('O serviço está temporariamente indisponível. Tente novamente em instantes.');
+    exit('Erro real do PDO: ' . $error->getMessage());
 }
