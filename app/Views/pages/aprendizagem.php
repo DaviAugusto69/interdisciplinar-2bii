@@ -46,7 +46,13 @@ if (!$lesson): ?>
             <?php elseif ($mediaUrl && $type === 'imagem'): ?>
                 <img class="img-fluid" src="<?= e($mediaUrl) ?>" alt="<?= e($description ?: $lessonTitle) ?>">
             <?php endif; ?>
-            <?php if ($mediaUrl): ?><p><a href="<?= e($mediaUrl) ?>">Abrir material da aula</a></p><?php endif; ?>
+
+            <div class="mb-3">
+                <a class="btn-material-aula" href="<?= e(url('pages/material')) ?>?aula=<?= e($lessonNumber) ?>">
+                    <i class="bi bi-journal-text" aria-hidden="true"></i> Abrir material da aula
+                </a>
+            </div>
+
             <?php if ($bodyText): ?><p><?= nl2br(e($bodyText)) ?></p><?php endif; ?>
 
             <?php if ($completed): ?>
