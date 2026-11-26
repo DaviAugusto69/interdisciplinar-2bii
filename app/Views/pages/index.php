@@ -11,7 +11,7 @@
 
                 <div class="ratio ratio-16x9 shadow rounded-4 overflow-hidden border">
                     <video controls preload="metadata">
-                        <source src="<?= e(asset('assets/tutorial-cadastro.mp4')) ?>" type="video/mp4">
+                        <source src="<?= e(asset('assets/video-eda-tutorial.mp4')) ?>" type="video/mp4">
                         Seu navegador não suporta a reprodução de vídeos.
                     </video>
                 </div>
