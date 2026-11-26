@@ -10,6 +10,10 @@ if (!$lesson): ?>
     </section>
 <?php return; endif;
 [$lessonSlug, $lessonTitle, , $description, $type, , $bodyText, $category] = $lesson;
+$isSecurityCourse = str_starts_with($lessonSlug, 'seguranca-');
+$materialHref = $isSecurityCourse
+    ? url('pages/material') . '?aula=' . rawurlencode($lessonSlug)
+    : url('pages/material') . '?aula=' . rawurlencode((string) $lessonNumber) . '&voltar=' . rawurlencode($lessonSlug);
 ?>
 
 <div class="lesson-page">
@@ -17,6 +21,7 @@ if (!$lesson): ?>
         <nav class="lesson-menu" aria-label="Navegação da aprendizagem">
             <a href="<?= e(url('pages/index')) ?>"><i class="bi bi-house-door" aria-hidden="true"></i> Início</a>
             <a href="<?= e(url('pages/aprendizagem')) ?>" aria-current="page"><i class="bi bi-book" aria-hidden="true"></i> Aprender</a>
+            <a href="<?= e(url('pages/painel')) ?>"><i class="bi bi-collection-play" aria-hidden="true"></i> Cursos</a>
             <a href="#ajuda-aula"><i class="bi bi-question-circle" aria-hidden="true"></i> Ajuda</a>
         </nav>
 
@@ -27,6 +32,9 @@ if (!$lesson): ?>
                 <progress value="<?= e($lessonNumber) ?>" max="<?= e($lessonCount) ?>" aria-label="Posição na sequência de aulas"></progress>
                 <span><?= e($lessonNumber) ?> de <?= e($lessonCount) ?> aulas</span>
             </div>
+            <nav aria-label="Navegação de cursos">
+                <a class="lesson-course-back" href="<?= e(url('pages/aprendizagem')) ?>"><i class="bi bi-grid" aria-hidden="true"></i> Todos os cursos</a>
+            </nav>
             <nav aria-label="Aulas do módulo">
                 <?php foreach ($lessons as $index => [$slug, $name, $icon]): ?>
                     <a href="<?= e($lessonUrl($slug)) ?>"<?= $lessonIndex === $index ? ' aria-current="page"' : '' ?>>
@@ -39,8 +47,12 @@ if (!$lesson): ?>
         <section class="lesson-main" aria-labelledby="lesson-title">
             <h2 id="lesson-title"><?= e($lessonTitle) ?></h2>
             <?php if ($description): ?><p><?= e($description) ?></p><?php endif; ?>
-            <?php if ($mediaUrl && $type === 'video'): ?>
-                <div class="lesson-video"><video controls preload="metadata" playsinline src="<?= e($mediaUrl) ?>" aria-labelledby="lesson-title"></video></div>
+            <?php if ($type === 'video' && str_starts_with($lessonSlug, 'seguranca-')): ?>
+                <div class="lesson-video"><video controls preload="metadata" playsinline aria-labelledby="lesson-title"></video></div>
+            <?php elseif ($mediaUrl && $type === 'video'): ?>
+                <div class="lesson-video">
+                    <video controls preload="metadata" playsinline src="<?= e($mediaUrl) ?>" aria-labelledby="lesson-title"></video>
+                </div>
             <?php elseif ($mediaUrl && $type === 'audio'): ?>
                 <audio controls preload="none" src="<?= e($mediaUrl) ?>" aria-labelledby="lesson-title"></audio>
             <?php elseif ($mediaUrl && $type === 'imagem'): ?>
@@ -48,12 +60,18 @@ if (!$lesson): ?>
             <?php endif; ?>
 
             <div class="mb-3">
-                <a class="btn-material-aula" href="<?= e(url('pages/material')) ?>?aula=<?= e($lessonNumber) ?>">
+                <a class="btn-material-aula" href="<?= e($materialHref) ?>">
                     <i class="bi bi-journal-text" aria-hidden="true"></i> Abrir material da aula
                 </a>
             </div>
 
-            <?php if ($bodyText): ?><p><?= nl2br(e($bodyText)) ?></p><?php endif; ?>
+            <?php if ($bodyText): ?>
+                <div class="lesson-body">
+                    <?php foreach (preg_split('/\R{2,}/', trim($bodyText)) as $paragraph): ?>
+                        <p><?= nl2br(e($paragraph)) ?></p>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
 
             <?php if ($completed): ?>
                 <p role="status">Aula concluída.</p>
@@ -65,7 +83,7 @@ if (!$lesson): ?>
                 </form>
             <?php endif; ?>
 
-            <?php if ($activities): ?>
+            <?php if ($activities && !$isSecurityCourse): ?>
                 <section id="atividades" aria-labelledby="activities-title">
                     <h3 id="activities-title">Atividades da aula</h3>
                     <?php if ($activityMessage): ?><p role="status"><?= e($activityMessage) ?></p><?php endif; ?>

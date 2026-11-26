@@ -11,10 +11,22 @@ class Lesson
     public static function all(): array
     {
         $pdo = Database::connect();
-        $stmt = $pdo->query('SELECT l.slug, l.title, l.icon, l.description, l.type, l.media_url, l.body_text, c.name
+        $stmt = $pdo->query('SELECT l.slug, l.title, l.icon, l.description, l.type, l.media_url, l.body_text, c.name, l.category_id
              FROM lessons l LEFT JOIN categories c ON c.id = l.category_id
              WHERE l.is_published = 1 AND l.archived_at IS NULL ORDER BY l.id ASC');
         return $stmt->fetchAll(\PDO::FETCH_NUM);
+    }
+
+    public static function findPublishedBySlug(string $slug): ?array
+    {
+        $stmt = Database::connect()->prepare(
+            'SELECT l.slug, l.title, l.icon, l.description, l.type, l.media_url, l.body_text, c.name, l.category_id
+             FROM lessons l LEFT JOIN categories c ON c.id = l.category_id
+             WHERE l.slug = :slug AND l.is_published = 1 AND l.archived_at IS NULL LIMIT 1'
+        );
+        $stmt->execute([':slug' => $slug]);
+        $lesson = $stmt->fetch(\PDO::FETCH_NUM);
+        return $lesson ?: null;
     }
 
     /**
@@ -23,9 +35,10 @@ class Lesson
     public static function recentPublications(): array
     {
         return Database::connect()->query(
-            'SELECT slug, title FROM lessons
-             WHERE is_published = 1 AND archived_at IS NULL
-             ORDER BY published_at DESC, id DESC LIMIT 5'
+            'SELECT l.slug, l.title, l.icon, l.description, c.name AS category
+             FROM lessons l LEFT JOIN categories c ON c.id = l.category_id
+             WHERE l.is_published = 1 AND l.archived_at IS NULL
+             ORDER BY l.published_at DESC, l.id DESC LIMIT 5'
         )->fetchAll();
     }
 

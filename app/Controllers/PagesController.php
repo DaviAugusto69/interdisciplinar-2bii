@@ -155,12 +155,19 @@ class PagesController
             if (!$done && $nextLesson === null) {
                 $nextLesson = $lesson[0];
             }
-            $category = $lesson[7];
-            if ($category !== null) {
-                $modules[$category] ??= ['total' => 0, 'completed' => 0, 'slug' => $lesson[0]];
-                $modules[$category]['total']++;
-                $modules[$category]['completed'] += (int) $done;
-            }
+            $category = trim((string) ($lesson[7] ?? '')) ?: 'Aprendizagem';
+            $isSecurity = $category === 'Segurança Digital';
+            $modules[$category] ??= [
+                'total' => 0,
+                'completed' => 0,
+                'slug' => $lesson[0],
+                'icon' => $isSecurity ? 'shield-check' : 'book-half',
+                'description' => $isSecurity
+                    ? 'Aprenda a reconhecer golpes e proteger suas informações.'
+                    : 'Aprenda a usar a tecnologia com mais confiança no dia a dia.',
+            ];
+            $modules[$category]['total']++;
+            $modules[$category]['completed'] += (int) $done;
         }
         $this->render('pages/painel', [
             'title' => 'Meu painel',
@@ -176,9 +183,53 @@ class PagesController
     public function aprendizagem(): void
     {
         $id = $this->currentUserId();
-        $lessons = Lesson::all();
+        $allLessons = Lesson::all();
+        $coursesById = [];
+        foreach ($allLessons as $item) {
+            $courseId = $item[8] ?? null;
+            $courseKey = $courseId === null ? 'uncategorized' : (string) $courseId;
+            $coursesById[$courseKey] ??= [
+                'category_id' => $courseId,
+                'name' => $item[7] ?? 'Aprendizagem',
+                'slug' => $item[0],
+                'count' => 0,
+                'icon' => ($item[7] ?? '') === 'Segurança Digital' ? 'shield-check' : 'book-half',
+                'description' => ($item[7] ?? '') === 'Segurança Digital'
+                    ? 'Aprenda a identificar golpes, proteger seus dados e navegar com mais segurança.'
+                    : 'Aprenda tecnologia passo a passo, com conteúdos práticos para o dia a dia.',
+            ];
+            $coursesById[$courseKey]['count']++;
+        }
+        $courses = array_values($coursesById);
         $requestedLesson = $_GET['aula'] ?? '';
-        $lessonIndex = array_search($requestedLesson, array_column($lessons, 0), true);
+        $selectedIndex = is_string($requestedLesson) && $requestedLesson !== ''
+            ? array_search($requestedLesson, array_column($allLessons, 0), true)
+            : false;
+        if ($selectedIndex === false && is_string($_GET['curso'] ?? null)) {
+            foreach ($allLessons as $index => $item) {
+                if ((string) ($item[8] ?? '') === $_GET['curso']) {
+                    $selectedIndex = $index;
+                    break;
+                }
+            }
+        }
+        if ($selectedIndex === false) {
+            $this->render('pages/cursos', [
+                'title' => 'Cursos',
+                'courses' => $courses,
+            ]);
+            return;
+        }
+
+        $selectedLesson = $allLessons[$selectedIndex];
+        $categoryId = $selectedLesson[8] ?? null;
+        $lessons = array_values(array_filter(
+            $allLessons,
+            static fn (array $item): bool => ($item[8] ?? null) === $categoryId
+        ));
+        $lessonIndex = $selectedLesson
+            ? array_search($selectedLesson[0], array_column($lessons, 0), true)
+            : false;
         $lessonIndex = $lessonIndex === false ? 0 : $lessonIndex;
         $lesson = $lessons[$lessonIndex] ?? null;
         $mediaUrl = Lesson::mediaUrl($lesson[5] ?? '');
@@ -199,9 +250,34 @@ class PagesController
 
     public function material(): void
     {
-        $this->currentUserId();
+        $id = $this->currentUserId();
+        $requestedLesson = $_GET['aula'] ?? '';
+        if (is_string($requestedLesson) && str_starts_with($requestedLesson, 'seguranca-')) {
+            $lesson = Lesson::findPublishedBySlug($requestedLesson);
+            if (!$lesson) {
+                http_response_code(404);
+                exit('Material não encontrado.');
+            }
+            $flash = $this->takeFlash();
+            $this->render('pages/material', [
+                'title' => 'Material de Segurança Digital',
+                'securityMaterial' => $lesson,
+                'courseReturnUrl' => url('pages/aprendizagem') . '?aula=' . rawurlencode($lesson[0]),
+                'activities' => Learning::activitiesForLesson($requestedLesson, $id),
+                'csrf' => $this->csrfToken(),
+                'activityMessage' => $flash['activityMessage'] ?? null,
+            ]);
+            return;
+        }
+        $returnSlug = $_GET['voltar'] ?? '';
+        $returnLesson = is_string($returnSlug) && $returnSlug !== ''
+            ? Lesson::findPublishedBySlug($returnSlug)
+            : null;
         $this->render('pages/material', [
             'title' => 'Material da Aula',
+            'courseReturnUrl' => $returnLesson && !str_starts_with((string) $returnLesson[0], 'seguranca-')
+                ? url('pages/aprendizagem') . '?aula=' . rawurlencode($returnLesson[0])
+                : url('pages/aprendizagem'),
         ]);
     }
 
@@ -231,6 +307,10 @@ class PagesController
         }
         $result = Learning::answer($id, $activity, $slug, $answer);
         $_SESSION['flash'] = ['activityMessage' => $result ? 'Atividade concluída.' : 'Resposta incorreta. Tente novamente.'];
+        if ($this->post('source') === 'material' && str_starts_with($slug, 'seguranca-')) {
+            header('Location: ' . url('pages/material') . '?aula=' . rawurlencode($slug) . '#atividades', true, 303);
+            return;
+        }
         header('Location: ' . url('pages/aprendizagem') . '?aula=' . rawurlencode($slug) . '#atividades', true, 303);
     }
 

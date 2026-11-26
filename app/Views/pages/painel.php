@@ -25,14 +25,20 @@
 
         <?php if ($modules): ?>
             <section class="learning-modules" aria-labelledby="modules-title">
-                <h2 id="modules-title">Módulos</h2>
-                <div class="learning-grid">
+                <h2 id="modules-title">Cursos</h2>
+                <div class="dashboard-course-grid">
                     <?php foreach ($modules as $name => $module): ?>
-                        <article class="learning-card">
+                        <?php $courseProgress = $module['total'] > 0 ? (int) round(($module['completed'] / $module['total']) * 100) : 0; ?>
+                        <article class="learning-card dashboard-course-card">
+                            <div class="dashboard-course-card-top">
+                                <span class="dashboard-course-icon"><i class="bi bi-<?= e($module['icon']) ?>" aria-hidden="true"></i></span>
+                                <span class="dashboard-course-label">Curso</span>
+                            </div>
                             <h3><?= e($name) ?></h3>
                             <p><?= e($module['completed']) ?> de <?= e($module['total']) ?> aulas concluídas.</p>
-                            <?php if ($module['completed'] === $module['total']): ?><p>Módulo concluído.</p><?php endif; ?>
-                            <a href="<?= e(url('pages/aprendizagem') . '?aula=' . rawurlencode($module['slug'])) ?>">Abrir módulo <?= e($name) ?></a>
+                            <?php if ($module['completed'] === $module['total']): ?><p>Curso concluído.</p><?php endif; ?>
+                            <progress class="dashboard-course-meter" value="<?= e($courseProgress) ?>" max="100" aria-label="Progresso no curso <?= e($name) ?>"></progress>
+                            <a class="dashboard-card-link" href="<?= e(url('pages/aprendizagem') . '?aula=' . rawurlencode($module['slug'])) ?>">Abrir curso <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
                         </article>
                     <?php endforeach; ?>
                 </div>
@@ -42,11 +48,20 @@
         <?php if ($recentLessons): ?>
             <section class="learning-modules" aria-labelledby="recent-lessons-title">
                 <h2 id="recent-lessons-title">Últimas aulas publicadas</h2>
-                <ul>
+                <div class="dashboard-lesson-grid">
                     <?php foreach ($recentLessons as $recent): ?>
-                        <li><a href="<?= e(url('pages/aprendizagem') . '?aula=' . rawurlencode($recent['slug'])) ?>"><?= e($recent['title']) ?></a></li>
+                        <?php $lessonIcon = trim((string) ($recent['icon'] ?? '')) ?: 'play-circle'; ?>
+                        <a class="dashboard-lesson-card" href="<?= e(url('pages/aprendizagem') . '?aula=' . rawurlencode($recent['slug'])) ?>">
+                            <span class="dashboard-lesson-icon"><i class="bi bi-<?= e($lessonIcon) ?>" aria-hidden="true"></i></span>
+                            <span class="dashboard-lesson-copy">
+                                <?php if (!empty($recent['category'])): ?><small><?= e($recent['category']) ?></small><?php endif; ?>
+                                <strong><?= e($recent['title']) ?></strong>
+                                <?php if (!empty($recent['description'])): ?><span><?= e($recent['description']) ?></span><?php endif; ?>
+                            </span>
+                            <i class="bi bi-arrow-up-right dashboard-lesson-arrow" aria-hidden="true"></i>
+                        </a>
                     <?php endforeach; ?>
-                </ul>
+                </div>
             </section>
         <?php endif; ?>
 

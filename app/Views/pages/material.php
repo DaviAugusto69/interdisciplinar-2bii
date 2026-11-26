@@ -1,4 +1,78 @@
 <?php
+if (!empty($securityMaterial)):
+    [$securitySlug, $securityTitle, , $securityDescription, , , $securityBody] = $securityMaterial;
+?>
+<section class="py-5">
+    <div class="container px-4 px-md-5" style="max-width: 960px;">
+        <div class="mb-4">
+            <a href="<?= e($courseReturnUrl ?? (url('pages/aprendizagem') . '?aula=' . rawurlencode($securitySlug))) ?>" class="btn btn-outline-primary fw-bold">
+                <i class="bi bi-arrow-left" aria-hidden="true"></i> Voltar para a aula
+            </a>
+        </div>
+
+        <article class="material-card mb-4">
+            <span class="badge bg-primary mb-2">Material de apoio · Segurança Digital</span>
+            <h1 class="h2 fw-bolder mb-2"><?= e($securityTitle) ?></h1>
+            <?php if ($securityDescription): ?><p class="lead text-muted mb-4"><?= e($securityDescription) ?></p><?php endif; ?>
+            <h2 class="h4 fw-bold mb-3"><i class="bi bi-book-half text-primary me-2" aria-hidden="true"></i>Conteúdo da aula</h2>
+            <?php if (trim((string) $securityBody) !== ''): ?>
+                <?php foreach (preg_split('/\R{2,}/', trim($securityBody)) as $paragraph): ?>
+                    <p><?= nl2br(e($paragraph)) ?></p>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <p>O material desta aula ainda está sendo preparado.</p>
+            <?php endif; ?>
+        </article>
+
+        <section class="material-card" id="atividades" aria-labelledby="security-activities-title">
+            <h2 class="h3 fw-bolder mb-1" id="security-activities-title"><i class="bi bi-patch-question-fill text-success me-2" aria-hidden="true"></i>Atividades de revisão</h2>
+            <p class="text-muted mb-4">Revise o conteúdo e escolha a atitude mais segura.</p>
+            <?php if ($activityMessage): ?><div class="alert alert-info" role="status"><?= e($activityMessage) ?></div><?php endif; ?>
+            <?php if (empty($activities)): ?>
+                <p>As atividades desta aula ainda não estão disponíveis.</p>
+            <?php else: ?>
+                <?php foreach ($activities as $activity): ?>
+                    <article class="border rounded-3 p-3 p-md-4 mb-3">
+                        <h3 class="h5 fw-bold"><?= e($activity['title']) ?></h3>
+                        <p><?= nl2br(e($activity['prompt'])) ?></p>
+                        <?php if ($activity['completed_at']): ?>
+                            <p class="text-success fw-semibold mb-0" role="status"><i class="bi bi-check-circle-fill" aria-hidden="true"></i> Atividade concluída.</p>
+                            <a class="btn btn-primary mt-3" href="<?= e($courseReturnUrl ?? (url('pages/aprendizagem') . '?aula=' . rawurlencode($securitySlug))) ?>">
+                                <i class="bi bi-arrow-left me-1" aria-hidden="true"></i> Voltar ao curso
+                            </a>
+                        <?php else: ?>
+                            <form method="post" action="<?= e(url('pages/answerActivity')) ?>">
+                                <input type="hidden" name="csrf" value="<?= e($csrf) ?>">
+                                <input type="hidden" name="lesson" value="<?= e($securitySlug) ?>">
+                                <input type="hidden" name="activity" value="<?= e($activity['id']) ?>">
+                                <input type="hidden" name="source" value="material">
+                                <?php if ($activity['choices']): ?>
+                                    <fieldset class="mb-3">
+                                        <legend class="h6 fw-semibold">Escolha a resposta</legend>
+                                        <?php foreach (explode("\n", $activity['choices']) as $index => $choice): ?>
+                                            <?php $optionId = 'material-answer-' . $activity['id'] . '-' . $index; ?>
+                                            <div class="form-check mb-2">
+                                                <input class="form-check-input" type="radio" name="answer" id="<?= e($optionId) ?>" value="<?= e($choice) ?>" required>
+                                                <label class="form-check-label" for="<?= e($optionId) ?>"><?= e($choice) ?></label>
+                                            </div>
+                                        <?php endforeach; ?>
+                                    </fieldset>
+                                <?php elseif ($activity['requires_answer']): ?>
+                                    <label class="form-label" for="material-answer-<?= e($activity['id']) ?>">Sua resposta</label>
+                                    <input class="form-control mb-3" id="material-answer-<?= e($activity['id']) ?>" name="answer" required maxlength="150">
+                                <?php endif; ?>
+                                <button class="btn btn-primary" type="submit"><?= $activity['requires_answer'] ? 'Enviar resposta' : 'Concluir atividade' ?></button>
+                            </form>
+                        <?php endif; ?>
+                    </article>
+                <?php endforeach; ?>
+            <?php endif; ?>
+        </section>
+    </div>
+</section>
+<?php return; endif; ?>
+
+<?php
 // Recebe ?aula=1 (ou 2, 3, 4, 5) pela URL; padrão é 1
 $aulaId = isset($_GET['aula']) ? (int)$_GET['aula'] : 1;
 
@@ -142,7 +216,7 @@ $atual = $materiais[$aulaId] ?? $materiais[1];
 <section class="py-5">
     <div class="container px-4 px-md-5" style="max-width: 900px;">
         <div class="mb-4">
-            <a href="<?= e(url('pages/aprendizagem')) ?>" class="btn btn-outline-primary fw-bold">
+            <a href="<?= e($courseReturnUrl ?? url('pages/aprendizagem')) ?>" class="btn btn-outline-primary fw-bold">
                 <i class="bi bi-arrow-left"></i> Voltar para a aula
             </a>
         </div>
@@ -172,7 +246,7 @@ $atual = $materiais[$aulaId] ?? $materiais[1];
             <p class="text-muted mb-4">Clique na resposta que você considera correta para testar o que aprendeu:</p>
 
             <?php foreach ($atual['quiz'] as $qIndex => $questao): ?>
-                <div class="mb-4 pb-3 border-bottom" data-quiz-box>
+                <div class="mb-4 pb-3 border-bottom" data-quiz-box data-quiz-answered="false">
                     <p class="fw-bold fs-5 mb-3"><?= e($questao['pergunta']) ?></p>
                     <?php foreach ($questao['opcoes'] as $oIndex => $opcao): ?>
                         <button
@@ -188,6 +262,9 @@ $atual = $materiais[$aulaId] ?? $materiais[1];
                     </div>
                 </div>
             <?php endforeach; ?>
+            <a class="btn btn-primary mt-2" data-return-course hidden href="<?= e($courseReturnUrl ?? url('pages/aprendizagem')) ?>">
+                <i class="bi bi-arrow-left me-1" aria-hidden="true"></i> Voltar ao curso
+            </a>
         </div>
     </div>
 </section>
@@ -198,6 +275,7 @@ function verificarResposta(botao) {
     const opcoes = caixa.querySelectorAll('.quiz-option');
     const feedback = caixa.querySelector('.quiz-feedback');
     const acertou = botao.dataset.correta === '1';
+    caixa.dataset.quizAnswered = 'true';
 
     opcoes.forEach(btn => {
         btn.disabled = true;
@@ -214,5 +292,12 @@ function verificarResposta(botao) {
         feedback.className = 'quiz-feedback mt-2 fw-semibold text-success';
     }
     feedback.style.display = 'block';
+
+    const caixas = document.querySelectorAll('[data-quiz-box]');
+    const concluiuQuiz = [...caixas].every(item => item.dataset.quizAnswered === 'true');
+    const voltarAoCurso = document.querySelector('[data-return-course]');
+    if (concluiuQuiz && voltarAoCurso) {
+        voltarAoCurso.hidden = false;
+    }
 }
 </script>

@@ -35,6 +35,10 @@ Os scripts anteriores em `database/` pertencem ao banco inicial de demonstraçã
 - `support_messages` reaproveita a definição existente no script de perfil para registrar mensagens de ajuda.
 - Arquivar um conteúdo ou uma conta retira o item das listas ativas e preserva o histórico.
 
+### Curso de Segurança Digital
+
+Depois de aplicar a migração principal do banco, importe [database/curso-seguranca-digital.sql](database/curso-seguranca-digital.sql) no banco `eda_database`. O curso aparecerá como uma opção separada na tela de cursos e no painel do aluno, com cinco aulas, um espaço de player nativo e uma atividade de revisão por aula. Se você já importou uma versão anterior, importe o arquivo novamente para atualizar as aulas e deixar o player sem vídeo associado. O script pode ser reimportado sem duplicar as aulas ou atividades.
+
 ## Operação e validação
 
 - Em `/admin/learning`, cadastre categorias, defina atividades e configure recompensas por pontos. Marque a aula como publicada para que os alunos tenham acesso a ela. Atividades com resposta esperada são corrigidas no servidor. Use alternativas para criar quizzes e simulações de cenário que pedem ao aluno uma decisão. Atividades sem resposta esperada permitem confirmar uma prática.
