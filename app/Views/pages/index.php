@@ -20,97 +20,70 @@
     </div>
 </section>
 
-<section id="sobre-eda" class="bg-light py-5 eda-about-section">
+<section id="sobre-eda" class="eda-about-section">
     <div class="container px-4 px-md-5 eda-about-content">
-        
-
-<section id="sobre-eda" class="bg-light py-5 eda-about-section">
-    <div class="container px-4 px-md-5 eda-about-content">
-        <div class="row justify-content-center mb-5">
-            <div class="col-lg-10 col-xl-9 text-center">
-                <h2 class="display-5 fw-bolder mb-3 eda-about-title">
-                    <span class="text-gradient d-inline">Bem-vindo ao EDA!</span>
-                </h2>
-                <p class="fs-3 fw-light text-muted mb-4">Aprender sobre tecnologia nunca foi tão simples!</p>
-                <p class="lead text-muted">
-                    A tecnologia faz parte do nosso cotidiano e está presente em atividades como conversar com familiares,
-                    acessar informações, utilizar serviços e realizar tarefas pela internet. Entretanto, acompanhar tantas
-                    novidades pode ser um desafio, principalmente para quem ainda não possui muita familiaridade com o mundo digital.
-                </p>
-                <p class="lead text-muted mb-0">
-                    Foi pensando nisso que nasceu o <strong>EDA (Elderly Digital Accessibility)</strong>: uma plataforma criada
-                    para aproximar você da tecnologia, tornando o aprendizado digital mais simples, acessível e seguro.
-                    Aqui, você encontrará conteúdos preparados para ajudar a desenvolver suas habilidades digitais, compreender
-                    melhor o funcionamento das ferramentas tecnológicas e navegar pela internet com mais confiança e independência.
-                </p>
+        <div class="eda-intro-grid">
+            <div class="eda-intro-copy">
+                <p class="eda-eyebrow"><span></span> Sobre o projeto</p>
+                <h2 class="eda-about-title">Tecnologia mais acessível, <span class="text-gradient">no seu ritmo.</span></h2>
+                <p class="eda-intro-lead">O EDA é um espaço de aprendizagem digital pensado para tornar a tecnologia mais clara, próxima e útil no dia a dia.</p>
+                <p class="text-muted">Usar um celular, conversar por mensagem, fazer uma pesquisa ou acessar um serviço on-line pode trazer dúvidas para quem está começando. Reunimos orientações e atividades para ajudar você a entender cada etapa, praticar com tranquilidade e ganhar confiança para seguir por conta própria.</p>
+                <p class="text-muted mb-0">EDA significa <strong>Elderly Digital Accessibility</strong> (Acessibilidade Digital para Pessoas Idosas). O projeto valoriza uma aprendizagem acolhedora e acessível, especialmente para pessoas que querem desenvolver suas habilidades digitais sem pressa e sem complicação.</p>
             </div>
+            <aside class="eda-purpose-card" aria-label="Nossa proposta">
+                <div class="eda-purpose-icon"><i class="bi bi-compass" aria-hidden="true"></i></div>
+                <p class="eda-card-kicker">Nossa proposta</p>
+                <h3>Aprender fazendo, com segurança e autonomia.</h3>
+                <p>Explicações diretas, exemplos do cotidiano e recursos de acessibilidade ajudam você a transformar cada dúvida em um próximo passo.</p>
+                <div class="eda-purpose-tags"><span><i class="bi bi-check2-circle" aria-hidden="true"></i> No seu tempo</span><span><i class="bi bi-check2-circle" aria-hidden="true"></i> Para a vida real</span></div>
+            </aside>
         </div>
 
-        <div class="row justify-content-center mb-4">
-            <div class="col-12">
-                <h3 class="h2 fw-bolder text-center mb-4 eda-feature-title">O que você encontrará por aqui?</h3>
-                <div class="row g-4 justify-content-center">
-                    <div class="col-md-6 col-lg-3">
-                        <article class="bg-white rounded-4 shadow-sm p-4 h-100 eda-feature-card">
-                            <h4 class="h5 fw-bold">Videoaulas e conteúdos educativos</h4>
-                            <p class="text-muted mb-0">Aprenda por meio de vídeos, textos, áudios e imagens explicativas, explorando diferentes assuntos do universo digital.</p>
-                        </article>
-                    </div>
-                    <div class="col-md-6 col-lg-3">
-                        <article class="bg-white rounded-4 shadow-sm p-4 h-100 eda-feature-card">
-                            <h4 class="h5 fw-bold">Quizzes e atividades interativas</h4>
-                            <p class="text-muted mb-0">Teste seus conhecimentos, responda a perguntas e aprenda de maneira prática e dinâmica.</p>
-                        </article>
-                    </div>
-                    <div class="col-md-6 col-lg-3">
-                        <article class="bg-white rounded-4 shadow-sm p-4 h-100 eda-feature-card">
-                            <h4 class="h5 fw-bold">Segurança digital</h4>
-                            <p class="text-muted mb-0">Descubra como identificar possíveis golpes virtuais, mensagens falsas, tentativas de phishing e outras ameaças presentes na internet.</p>
-                        </article>
-                    </div>
-                    <div class="col-md-6 col-lg-3">
-                        <article class="bg-white rounded-4 shadow-sm p-4 h-100 eda-feature-card">
-                            <h4 class="h5 fw-bold">Simulações práticas</h4>
-                            <p class="text-muted mb-0">Familiarize-se com situações e ferramentas digitais por meio de atividades que aproximam o aprendizado do cotidiano.</p>
-                        </article>
-                    </div>
-                    <div class="col-md-6 col-lg-3">
-                        <article class="bg-white rounded-4 shadow-sm p-4 h-100 eda-feature-card">
-                            <h4 class="h5 fw-bold">Acompanhamento do progresso</h4>
-                            <p class="text-muted mb-0">Acompanhe as atividades concluídas e seu desenvolvimento, e retome seus estudos de onde parou.</p>
-                        </article>
-                    </div>
-                    <div class="col-md-6 col-lg-3">
-                        <article class="bg-white rounded-4 shadow-sm p-4 h-100 eda-feature-card">
-                            <h4 class="h5 fw-bold">Perguntas frequentes (FAQ)</h4>
-                            <p class="text-muted mb-0">Encontre respostas para dúvidas comuns sobre a plataforma e sua utilização.</p>
-                        </article>
-                    </div>
-                    <div class="col-md-6 col-lg-3">
-                        <article class="bg-white rounded-4 shadow-sm p-4 h-100 eda-feature-card">
-                            <h4 class="h5 fw-bold">Personalização e acessibilidade</h4>
-                            <p class="text-muted mb-0">Conte com recursos para tornar sua experiência mais confortável, como ajustes no tamanho da fonte, no contraste e nos temas de visualização.</p>
-                        </article>
-                    </div>
-                </div>
-            </div>
+        <div class="eda-section-heading">
+            <p class="eda-eyebrow"><span></span> Um caminho de aprendizagem</p>
+            <h3>O que você encontra no EDA</h3>
+            <p>Conteúdos e ferramentas para aprender, praticar e avançar com confiança.</p>
+        </div>
+        <div class="eda-feature-grid">
+            <article class="eda-feature-card">
+                <span class="eda-feature-icon"><i class="bi bi-play-circle" aria-hidden="true"></i></span>
+                <h4>Aulas e materiais</h4>
+                <p>Vídeos, textos, áudios e imagens explicam temas digitais em etapas fáceis de acompanhar.</p>
+            </article>
+            <article class="eda-feature-card">
+                <span class="eda-feature-icon"><i class="bi bi-phone" aria-hidden="true"></i></span>
+                <h4>Prática para o cotidiano</h4>
+                <p>Atividades e simulações aproximam o aprendizado de situações que você pode encontrar no celular e na internet.</p>
+            </article>
+            <article class="eda-feature-card">
+                <span class="eda-feature-icon"><i class="bi bi-shield-check" aria-hidden="true"></i></span>
+                <h4>Mais segurança on-line</h4>
+                <p>Aprenda cuidados importantes para reconhecer mensagens suspeitas e proteger suas informações.</p>
+            </article>
+            <article class="eda-feature-card">
+                <span class="eda-feature-icon"><i class="bi bi-patch-question" aria-hidden="true"></i></span>
+                <h4>Atividades e dúvidas</h4>
+                <p>Quizzes ajudam a revisar o que foi aprendido, e a área de ajuda reúne orientações para usar a plataforma.</p>
+            </article>
+            <article class="eda-feature-card">
+                <span class="eda-feature-icon"><i class="bi bi-graph-up-arrow" aria-hidden="true"></i></span>
+                <h4>Seu progresso</h4>
+                <p>Acompanhe as atividades concluídas e retome seus estudos de onde parou.</p>
+            </article>
+            <article class="eda-feature-card">
+                <span class="eda-feature-icon"><i class="bi bi-universal-access-circle" aria-hidden="true"></i></span>
+                <h4>Acessibilidade</h4>
+                <p>Ajustes de fonte, contraste e tema ajudam a deixar a experiência mais confortável.</p>
+            </article>
         </div>
 
-        <div class="row justify-content-center pt-4">
-            <div class="col-lg-10 col-xl-9">
-                <div class="bg-white rounded-4 shadow-sm p-4 p-md-5 text-center eda-mission-panel">
-                    <h3 class="h2 fw-bolder mb-3">Nossa missão é conectar pessoas ao mundo digital!</h3>
-                    <p class="text-muted">
-                        Acreditamos que a idade ou a falta de experiência com tecnologia não devem ser obstáculos para aprender,
-                        descobrir e participar da sociedade digital. Por isso, o EDA busca promover a inclusão digital, incentivar
-                        a autonomia e oferecer conhecimentos que contribuam para uma utilização mais consciente e segura da internet.
-                    </p>
-                    <p class="lead fw-semibold mb-4">
-                        Não importa se você está começando agora ou se deseja aprimorar seus conhecimentos: aqui, cada aprendizado é uma nova conquista!
-                    </p>
-                    <p class="h4 fw-bolder text-gradient mb-0">EDA — Tecnologia sem barreiras. Conhecimento para todos!</p>
-                </div>
+        <div class="eda-mission-panel">
+            <div>
+                <p class="eda-eyebrow"><span></span> Nosso compromisso</p>
+                <h3>Conhecimento digital deve estar ao alcance de todos.</h3>
+                <p class="mb-0">Queremos apoiar cada pessoa para que use a tecnologia com mais independência, faça escolhas conscientes e participe do mundo digital com confiança. Cada pessoa aprende de um jeito — por isso, você pode explorar os conteúdos e avançar passo a passo.</p>
             </div>
+            <a class="btn btn-primary btn-lg" href="<?= e(url('pages/aprendizagem')) ?>">Conheça os conteúdos <i class="bi bi-arrow-right ms-2" aria-hidden="true"></i></a>
         </div>
     </div>
 </section>
