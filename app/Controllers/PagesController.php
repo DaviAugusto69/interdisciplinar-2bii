@@ -79,7 +79,8 @@ class PagesController
         session_regenerate_id(true);
         $_SESSION = ['user_id' => $id];
         AccessLog::record($id);
-        $this->redirectBack('pages/contact', 'account-status', ['ok' => 'cadastro']);
+        header('Location: ' . url('pages/profile'), true, 303);
+        exit;
     }
 
     public function login(): void
